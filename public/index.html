@@ -3,162 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Synco</title>
-
 <style>
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-:root {
-    --bg: #0f1115;
-    --sidebar: #151820;
-    --panel: #191d26;
-    --panel2: #20252f;
-    --border: #2b303b;
-
-    --text: #f1f3f5;
-    --muted: #8b93a1;
-
-    --green: #25d366;
-    --blue: #4c8dff;
-    --purple: #9b6cff;
-
-    --userBubble: #155d3a;
-    --aiBubble: #252a34;
-}
-
+html,
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(180deg, #0b0d10 0%, #11161b 100%);
-    color: var(--text);
-    height: 100vh;
+    height: 100%;
+    margin: 0;
     overflow: hidden;
 }
 
-
-/* ================================
-   APP
-================================ */
-
-.app {
-    display: grid;
-    grid-template-columns: minmax(260px, 285px) minmax(0, 1fr) minmax(210px, 250px);
-    height: 100vh;
-    width: 100vw;
-    max-width: 100%;
-    min-height: 100dvh;
-    overflow: hidden;
-    background: rgba(11, 13, 16, 0.96);
-}
-
-
-/* ================================
-   LEFT SIDEBAR
-================================ */
-
-.sidebar {
-    background: rgba(23, 29, 37, 0.78);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-right: 1px solid var(--border);
+.message-tools {
     display: flex;
-    flex-direction: column;
-    min-height: 0;
-    height: 100vh;
-    box-shadow: inset -1px 0 0 rgba(255,255,255,0.04);
+    gap: 6px;
+    opacity: 0;
+    transition: opacity .15s ease;
 }
 
-.sidebar-header {
-    height: 90px;
+.message:hover .message-tools,
+.message:focus-within .message-tools {
+    opacity: 1;
+}
+
+.message-select-wrap {
     display: flex;
     align-items: center;
-    padding: 0 14px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
+    gap: 8px;
+    margin-left: auto;
 }
 
-.logo {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 8px 10px;
-    border-radius: 12px;
-    transition: background .15s ease;
-}
-
-.logo:hover {
-    background: #242a29;
-}
-
-.logo-icon {
-    width: 38px;
-    height: 38px;
-
-    border-radius: 12px;
-
-    display: flex;
+.message-select {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    background: linear-gradient(
-        135deg,
-        #4c8dff,
-        #9b6cff
-    );
-
-    font-size: 18px;
+    margin-left: auto;
 }
 
-.search {
-    display: none;
+.message-select input {
+    width: 16px;
+    height: 16px;
+    accent-color: #6ea8fe;
+    cursor: pointer;
 }
 
-.status-area {
-    padding: 14px 12px 10px;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(20, 24, 30, 0.96), rgba(17, 20, 24, 0.9));
-    flex-shrink: 0;
-}
-
-.status-header {
+.message-header-row {
+    display: flex;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    padding: 0 4px;
+    gap: 8px;
 }
 
-.status-header-label {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.status-new-btn {
-    border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.04);
-    color: var(--text);
-    border-radius: 999px;
-    padding: 7px 12px;
-    font-size: 11px;
-    cursor: pointer;
-    transition: background .15s ease, transform .15s ease;
-}
-
-.status-new-btn:hover {
-    background: rgba(255,255,255,0.08);
-    transform: translateY(-1px);
+.message-header-row .sender {
+    flex: 1;
 }
 
 .status-strip {
@@ -168,6 +62,49 @@ body {
     padding: 0 2px 4px;
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+.status-area {
+    flex: 0 0 auto;
+    padding: 12px 10px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.status-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 9px;
+}
+
+.status-header-label {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.status-new-btn {
+    align-items: center;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    color: var(--accent-ink);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    gap: 5px;
+    min-height: 30px;
+    padding: 0 12px;
+    transition: filter .15s ease, transform .15s ease;
+}
+
+.status-new-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
 }
 
 .status-card {
@@ -238,6 +175,7 @@ body {
     font: inherit;
     text-align: left;
     flex-shrink: 0;
+    margin-top: auto;
 }
 
 .sidebar-watchstream:hover {
@@ -543,6 +481,37 @@ body.members-collapsed .app {
     opacity: 1;
 }
 
+.message-select-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.message-select {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+}
+
+.message-select input {
+    width: 16px;
+    height: 16px;
+    accent-color: #6ea8fe;
+    cursor: pointer;
+}
+
+.message-header-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.message-header-row .sender {
+    flex: 1;
+}
+
 .message-action {
     border: 0;
     background: transparent;
@@ -557,6 +526,34 @@ body.members-collapsed .app {
     color: var(--text);
 }
 
+.message-action.danger {
+    color: #ff9ca3;
+}
+.message-action.danger:hover {
+    color: #ffd7db;
+}
+.clear-chat-btn {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+}
+.clear-chat-btn:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.12);
+}
+.clear-chat-btn.secondary {
+    background: rgba(255, 117, 117, 0.08);
+    border-color: rgba(255, 117, 117, 0.2);
+    color: #ffd9d9;
+}
+.clear-chat-btn.hidden {
+    display: none;
+}
 .reply-preview {
     border-left: 3px solid var(--blue);
     color: var(--muted);
@@ -602,13 +599,7 @@ body.members-collapsed .app {
     color: #cfe8ff;
     font-size: 11px;
     font-weight: 700;
-    margin-left: auto;
     text-decoration: none;
-    white-space: nowrap;
-}
-
-.attachment-download:hover {
-    text-decoration: underline;
 }
 
 .attachment-image {
@@ -1462,8 +1453,8 @@ body.members-collapsed .app {
 @media(max-width: 700px) {
     .app {
         grid-template-columns: 1fr;
-        height: 100vh;
-        width: 100vw;
+        height: 100dvh;
+        width: 100%;
     }
 
     .sidebar {
@@ -1775,10 +1766,49 @@ body.members-collapsed .app {
     --warm: #f0c58a;
 }
 
-body { font-family: "Trebuchet MS", "Segoe UI", sans-serif; background: #101214; }
-.app { grid-template-columns: 290px minmax(440px, 1fr) 270px; }
-.sidebar, .members { background: #17191c; }
-.sidebar-header, .chat-header, .members-header { height: 78px; }
+body { font-family: "Trebuchet MS", "Segoe UI", sans-serif; background: #101214; color: var(--text); }
+.app {
+    display: grid;
+    grid-template-columns: 290px minmax(440px, 1fr) 270px;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+}
+.sidebar-header {
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    min-height: 78px;
+    padding: 0 16px;
+}
+.logo {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    min-width: 0;
+    width: 100%;
+}
+.logo-icon {
+    align-items: center;
+    display: flex;
+    flex: 0 0 45px;
+    font-size: 18px;
+    height: 45px;
+    justify-content: center;
+    width: 45px;
+}
+.profile-summary {
+    flex: 1;
+}
+.sidebar {
+    background: #17191c;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+.members { background: #17191c; }
+.chat-header, .members-header { height: 78px; }
 .logo { letter-spacing: -.03em; font-size: 17px; }
 .logo-icon, .group-avatar { background: var(--accent); color: var(--accent-ink); border-radius: 13px; }
 .search input, .message-input { border: 1px solid transparent; transition: border-color .2s, background .2s; }
@@ -1799,7 +1829,8 @@ body { font-family: "Trebuchet MS", "Segoe UI", sans-serif; background: #101214;
 .message.error .bubble { background: #342526; border-color: #704244; color: #ffc9c9; }
 .message.system .bubble { background: #242a27; border-color: #3d5145; color: #c8d8ca; }
 .input-area { background: rgba(29,32,36,.92); padding: 16px clamp(16px, 4vw, 58px) 20px; }
-.message-input { background: #25292c; border-color: #363d3f; }
+.input-area { gap: 6px; padding-bottom: 12px; padding-top: 10px; }
+.message-input { background: #25292c; border-color: #363d3f; box-sizing: border-box; height: 44px; line-height: 20px; }
 .send-btn { background: var(--accent); color: var(--accent-ink); border-radius: 12px; }
 .member { border-radius: 10px; }
 .member:hover { background: #24282a; }
@@ -2159,6 +2190,24 @@ body[data-theme] .input-area { background-color: var(--panel); }
 
             <div class="header-buttons">
                 <button
+                    class="clear-chat-btn"
+                    id="toggleDeleteModeBtn"
+                    type="button"
+                    onclick="toggleChatDeleteMode()"
+                    title="Select messages to delete"
+                >☑</button>
+                <button
+                    class="clear-chat-btn secondary hidden"
+                    id="deleteSelectedBtn"
+                    type="button"
+                    onclick="deleteSelectedMessages()"
+                >Delete selected</button>
+                <button
+                    class="clear-chat-btn"
+                    type="button"
+                    onclick="clearAllMessages()"
+                >Clear all</button>
+                <button
                     class="icon-btn"
                     onclick="openInvite()"
                     title="Invite AI"
@@ -2296,6 +2345,7 @@ body[data-theme] .input-area { background-color: var(--panel); }
                 <button
                     class="send-btn"
                     onclick="sendMessage()"
+                    id="sendMessageBtn"
                 >
                     ➤
                 </button>
@@ -2757,6 +2807,111 @@ let mentionSelectedIndex = 0;
 let mentionOptions = [];
 let pendingAttachment = null;
 let replyTo = null;
+let editingMessageId = null;
+let chatDeleteMode = false;
+let selectedMessageIds = new Set();
+
+function makeMessageId(prefix = "msg") {
+    return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+}
+
+function updateChatActionButtons() {
+    const toggleBtn = document.getElementById("toggleDeleteModeBtn");
+    const deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
+
+    if (toggleBtn) {
+        toggleBtn.textContent = chatDeleteMode ? "✕" : "☑";
+        toggleBtn.title = chatDeleteMode ? "Cancel message selection" : "Select messages to delete";
+    }
+
+    if (deleteSelectedBtn) {
+        deleteSelectedBtn.classList.toggle("hidden", !chatDeleteMode || selectedMessageIds.size === 0);
+    }
+}
+
+function toggleChatDeleteMode() {
+    chatDeleteMode = !chatDeleteMode;
+    if (!chatDeleteMode) {
+        selectedMessageIds.clear();
+    }
+    renderCurrentGroup();
+    updateChatActionButtons();
+}
+
+function selectMessageForDelete(messageId, isSelected) {
+    if (!messageId) return;
+
+    if (isSelected) {
+        selectedMessageIds.add(messageId);
+    } else {
+        selectedMessageIds.delete(messageId);
+    }
+
+    updateChatActionButtons();
+}
+
+function deleteSelectedMessages() {
+    if (!selectedMessageIds.size) return;
+
+    const group = state.groups[state.currentGroupId];
+    if (!group) return;
+
+    const ids = [...selectedMessageIds];
+    group.messages = group.messages.filter(message => !ids.includes(message.id));
+
+    if (!group.messages.length) {
+        group.messages = [{
+            id: makeMessageId(),
+            sender: "System",
+            content: "Conversation cleared. Start a new message."
+        }];
+    }
+
+    chatDeleteMode = false;
+    selectedMessageIds.clear();
+    persistAppState();
+    renderCurrentGroup();
+    buildGroupList();
+}
+
+function clearAllMessages() {
+    const group = state.groups[state.currentGroupId];
+    if (!group) return;
+
+    const confirmed = window.confirm("Clear the entire conversation in this group?");
+    if (!confirmed) return;
+
+    group.messages = [{
+        id: makeMessageId(),
+        sender: "System",
+        content: "Conversation cleared. Start a new message."
+    }];
+
+    chatDeleteMode = false;
+    selectedMessageIds.clear();
+    persistAppState();
+    renderCurrentGroup();
+    buildGroupList();
+}
+
+function startEditMessage(message) {
+    if (!message || !message.id) return;
+
+    editingMessageId = message.id;
+    inputEl.value = message.content;
+    inputEl.placeholder = "Edit message...";
+    const sendBtn = document.getElementById("sendMessageBtn");
+    if (sendBtn) sendBtn.textContent = "✓";
+    inputEl.focus();
+}
+
+function cancelEditMessage() {
+    editingMessageId = null;
+    inputEl.value = "";
+    inputEl.placeholder = "Type a message... @Gemini @Groq @Ollama @all";
+    const sendBtn = document.getElementById("sendMessageBtn");
+    if (sendBtn) sendBtn.textContent = "➤";
+}
 
 window.addEventListener("DOMContentLoaded", init);
 
@@ -3159,13 +3314,6 @@ function setupThemeOptions() {
     });
 }
 
-Object.defineProperty(window, "openStatusModal", { value: openStatusModal, configurable: true });
-Object.defineProperty(window, "startEditStatus", { value: startEditStatus, configurable: true });
-Object.defineProperty(window, "deleteStatus", { value: deleteStatus, configurable: true });
-Object.defineProperty(window, "closeStatusModal", { value: closeStatusModal, configurable: true });
-Object.defineProperty(window, "setStatusType", { value: setStatusType, configurable: true });
-Object.defineProperty(window, "publishStatus", { value: publishStatus, configurable: true });
-
 function setupProfilePhotoControls() {
     const uploadBtn = document.getElementById("uploadProfilePhotoBtn");
     const removeBtn = document.getElementById("removeProfilePhotoBtn");
@@ -3291,6 +3439,20 @@ function renderCurrentGroup() {
     const group = state.groups[state.currentGroupId];
     if (!group) return;
 
+    if (!group.messages.length) {
+        group.messages = [{
+            id: makeMessageId(),
+            sender: "System",
+            content: "Conversation cleared. Start a new message."
+        }];
+    }
+
+    group.messages.forEach(message => {
+        if (!message.id) {
+            message.id = makeMessageId();
+        }
+    });
+
     groupNameEl.textContent = group.name;
     groupMembersEl.textContent = `${group.members.length + 1} members`;
     groupAvatarEl.textContent = group.emoji;
@@ -3304,6 +3466,8 @@ function renderCurrentGroup() {
                 : aiCatalog[m.sender]?.emoji || "🤖";
         addMessageToDOM(m.sender, m.content, m.sender === "Marco", emoji, m);
     });
+
+    updateChatActionButtons();
 
     scrollMessages();
 }
@@ -3331,6 +3495,12 @@ function addMessageToDOM(sender, content, isUser, emoji, metadata = {}) {
     const message = document.createElement("div");
     const isError = String(content).startsWith("❌");
     const isSystem = sender === "System";
+    const messageId = metadata.id || makeMessageId();
+    const selectionCheckbox = chatDeleteMode
+        ? `<label class="message-select"><input type="checkbox" data-message-id="${messageId}" ${selectedMessageIds.has(messageId) ? "checked" : ""}></label>`
+        : "";
+    const canEditDelete = isUser && !isSystem;
+
     message.className = "message" + (isUser ? " user" : "") +
         (isError ? " error" : "") + (isSystem ? " system" : "");
     const replyMarkup = metadata.replyTo
@@ -3344,18 +3514,59 @@ function addMessageToDOM(sender, content, isUser, emoji, metadata = {}) {
     const attachmentMarkup = attachment
         ? `<div class="attachment">${attachmentImage}<div class="attachment-meta"><span>📎</span><span class="attachment-name">${escapeHTML(attachment.name || "file")}</span><span class="attachment-size">${formatFileSize(attachment.size || 0)}</span>${attachmentDownload ? `<a class="attachment-download" href="${attachmentDownload}" download="${escapeHTML(attachment.name || "file")}" title="Download ${escapeHTML(attachment.name || "file")}">Download</a>` : ""}</div></div>`
         : "";
+    const actionMarkup = canEditDelete
+        ? `<div class="message-tools">
+                <button class="message-action" type="button" data-message-action="edit" data-message-id="${messageId}">Edit</button>
+                <button class="message-action danger" type="button" data-message-action="delete" data-message-id="${messageId}">Delete</button>
+            </div>`
+        : "";
+
     message.innerHTML = `
         <div class="avatar">${escapeHTML(emoji)}</div>
         <div class="message-content">
-            <div class="sender">${escapeHTML(sender)}</div>
+            <div class="message-header-row">
+                <div class="sender">${escapeHTML(sender)}</div>
+                ${selectionCheckbox}
+            </div>
             ${replyMarkup}
             <div class="bubble markdown-content">${renderMarkdown(content)}${attachmentMarkup}</div>
-            <div class="message-tools">
-                <button class="message-action" type="button">Reply</button>
-            </div>
+            ${actionMarkup}
         </div>
     `;
-    message.querySelector(".message-action").addEventListener("click", () => startReply({ sender, content }));
+
+    const editButton = message.querySelector("[data-message-action='edit']");
+    if (editButton) {
+        editButton.addEventListener("click", () => {
+            const selectedMessage = state.groups[state.currentGroupId].messages.find(item => item.id === messageId);
+            if (selectedMessage) startEditMessage(selectedMessage);
+        });
+    }
+
+    const deleteButton = message.querySelector("[data-message-action='delete']");
+    if (deleteButton) {
+        deleteButton.addEventListener("click", () => {
+            const group = state.groups[state.currentGroupId];
+            group.messages = group.messages.filter(item => item.id !== messageId);
+            if (!group.messages.length) {
+                group.messages = [{
+                    id: makeMessageId(),
+                    sender: "System",
+                    content: "Conversation cleared. Start a new message."
+                }];
+            }
+            persistAppState();
+            renderCurrentGroup();
+            buildGroupList();
+        });
+    }
+
+    const checkbox = message.querySelector("input[data-message-id]");
+    if (checkbox) {
+        checkbox.addEventListener("change", event => {
+            selectMessageForDelete(event.target.dataset.messageId, event.target.checked);
+        });
+    }
+
     messagesEl.appendChild(message);
 }
 
@@ -3363,7 +3574,7 @@ function addMessage(sender, content, emoji = "🤖", isUser = false, metadata = 
     const group = state.groups[state.currentGroupId];
     if (!group) return;
 
-    const message = { sender, content, ...metadata };
+    const message = { id: metadata.id || makeMessageId(), sender, content, ...metadata };
     group.messages.push(message);
 
     if (metadata.attachment) {
@@ -3394,6 +3605,18 @@ async function sendMessage() {
     const text = inputEl.value.trim();
     if (!text && !pendingAttachment) return;
 
+    if (editingMessageId) {
+        const group = state.groups[state.currentGroupId];
+        const target = group.messages.find(message => message.id === editingMessageId);
+        if (target) {
+            target.content = text || "";
+            persistAppState();
+            renderCurrentGroup();
+            cancelEditMessage();
+            return;
+        }
+    }
+
     const replyTarget = replyTo && aiCatalog[replyTo.sender] ? replyTo.sender : "";
     const alreadyMentionsReplyTarget = replyTarget
         && new RegExp(`(^|\\s)@${replyTarget}(?=\\s|$)`, "i").test(text);
@@ -3409,6 +3632,7 @@ async function sendMessage() {
     closeMentionMenu();
     clearReply();
     clearPendingAttachment();
+    cancelEditMessage();
 
     const targets = detectAITargets(messageText);
     if (!targets.length) {
