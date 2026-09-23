@@ -1,0 +1,4136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Synco</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #0f1115;
+    --sidebar: #151820;
+    --panel: #191d26;
+    --panel2: #20252f;
+    --border: #2b303b;
+
+    --text: #f1f3f5;
+    --muted: #8b93a1;
+
+    --green: #25d366;
+    --blue: #4c8dff;
+    --purple: #9b6cff;
+
+    --userBubble: #155d3a;
+    --aiBubble: #252a34;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #0b0d10 0%, #11161b 100%);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+/* ================================
+   APP
+================================ */
+
+.app {
+    display: grid;
+    grid-template-columns: minmax(260px, 285px) minmax(0, 1fr) minmax(210px, 250px);
+    height: 100vh;
+    width: 100vw;
+    max-width: 100%;
+    min-height: 100dvh;
+    overflow: hidden;
+    background: rgba(11, 13, 16, 0.96);
+}
+
+
+/* ================================
+   LEFT SIDEBAR
+================================ */
+
+.sidebar {
+    background: rgba(23, 29, 37, 0.78);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100vh;
+    box-shadow: inset -1px 0 0 rgba(255,255,255,0.04);
+}
+
+.sidebar-header {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.logo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 12px;
+    transition: background .15s ease;
+}
+
+.logo:hover {
+    background: #242a29;
+}
+
+.logo-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #4c8dff,
+        #9b6cff
+    );
+
+    font-size: 18px;
+}
+
+.search {
+    display: none;
+}
+
+.status-area {
+    padding: 14px 12px 10px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(20, 24, 30, 0.96), rgba(17, 20, 24, 0.9));
+    flex-shrink: 0;
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.status-header-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.status-new-btn {
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background .15s ease, transform .15s ease;
+}
+
+.status-new-btn:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-1px);
+}
+
+.status-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 0 2px 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+.status-card {
+    min-width: 72px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+.status-avatar-wrap {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 7px;
+    border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(135deg, #f6d365, #fda085, #87cefa, #9b6cff);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.06);
+}
+
+.status-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #2c313b;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+}
+
+.status-name {
+    font-size: 11px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.status-preview {
+    margin-top: 3px;
+    font-size: 10px;
+    color: #d7dbe1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 10px;
+    min-height: 0;
+}
+
+.sidebar-watchstream {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 15px 16px;
+    border: 0;
+    border-top: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+.sidebar-watchstream:hover {
+    background: #1c212b;
+    color: var(--text);
+}
+
+.sidebar-watchstream-icon {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(146, 229, 164, 0.4);
+    border-radius: 9px;
+    background: linear-gradient(135deg, rgba(108, 196, 112, 0.18), rgba(86, 160, 108, 0.28));
+    color: #dfffe5;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.sidebar-watchstream-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    margin: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.chat-item:hover {
+    background: rgba(255,255,255,0.03);
+    transform: translateX(1px);
+}
+
+.chat-item.active {
+    background: linear-gradient(90deg, rgba(76, 141, 255, 0.10), rgba(155, 108, 255, 0.08));
+    border: 1px solid rgba(76, 141, 255, 0.18);
+}
+
+.chat-avatar {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #303744;
+
+    font-size: 20px;
+}
+
+.chat-info {
+    min-width: 0;
+}
+
+.chat-name {
+    font-weight: bold;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-last {
+    font-size: 12px;
+
+    color: var(--muted);
+
+    margin-top: 4px;
+}
+
+
+/* ================================
+   MAIN CHAT
+================================ */
+
+.chat {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    background: #101319;
+}
+
+
+/* HEADER */
+
+.chat-header {
+    height: 74px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background: rgba(25, 29, 38, 0.72);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02);
+}
+
+.group-info {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+.group-avatar {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #4c8dff,
+        #9b6cff
+    );
+}
+
+.group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+.members.collapsed {
+    display: none;
+}
+
+body.members-collapsed .app {
+    grid-template-columns: 290px minmax(0, 1fr);
+}
+
+.group-name {
+    font-weight: bold;
+}
+
+.group-members {
+    font-size: 12px;
+
+    color: var(--muted);
+
+    margin-top: 3px;
+}
+
+.member-ellipsis {
+    width: 36px;
+    height: 36px;
+    margin-left: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.member-ellipsis:hover {
+    background: #303744;
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.icon-btn {
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    background: var(--panel2);
+
+    color: white;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+}
+
+.icon-btn:hover {
+    background: #303744;
+}
+
+
+/* ================================
+   MESSAGES
+================================ */
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 22px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: linear-gradient(180deg, rgba(16, 19, 25, 0.98), rgba(13, 16, 20, 0.98));
+}
+
+.message {
+    display: flex;
+
+    gap: 10px;
+
+    max-width: 80%;
+}
+
+.message.user {
+    align-self: flex-end !important;
+    margin-left: auto !important;
+    flex-direction: row-reverse !important;
+    justify-content: flex-end;
+}
+
+.message.user .message-content {
+    align-items: flex-end;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #303744;
+}
+
+.message-content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.sender {
+    font-size: 12px;
+
+    color: var(--muted);
+}
+
+.bubble {
+    padding: 11px 14px;
+
+    border-radius: 16px 16px 16px 6px;
+
+    background: var(--aiBubble);
+
+    line-height: 1.5;
+
+    white-space: pre-wrap;
+}
+
+.message-content {
+    min-width: 0;
+}
+
+.message-tools {
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity .15s ease;
+}
+
+.message:hover .message-tools,
+.message:focus-within .message-tools {
+    opacity: 1;
+}
+
+.message-action {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    padding: 2px 0;
+}
+
+.message-action:hover {
+    color: var(--text);
+}
+
+.reply-preview {
+    border-left: 3px solid var(--blue);
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 7px;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 4px 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attachment {
+    background: rgba(0, 0, 0, .16);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 8px;
+    display: grid;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 10px;
+}
+
+.attachment-meta {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+}
+
+.attachment-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attachment-size {
+    color: var(--muted);
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.attachment-download {
+    color: #cfe8ff;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: auto;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.attachment-download:hover {
+    text-decoration: underline;
+}
+
+.attachment-image {
+    display: block;
+    max-width: min(100%, 300px);
+    max-height: 180px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+@media(max-width: 520px) {
+    .attachment-meta {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .attachment-name {
+        flex: 1 1 120px;
+    }
+
+    .attachment-download {
+        margin-left: 0;
+    }
+}
+
+.markdown-content p + p {
+    margin-top: 8px;
+}
+
+.markdown-content code {
+    background: rgba(0, 0, 0, .24);
+    border-radius: 4px;
+    font-family: Consolas, monospace;
+    padding: 2px 4px;
+}
+
+.markdown-content a {
+    color: #9fc1ff;
+    text-decoration: underline;
+}
+
+.user .bubble {
+    background: linear-gradient(135deg, #6ea237, #97c75a) !important;
+    color: #f8fff1 !important;
+    border-radius: 16px 16px 6px 16px !important;
+    border: 1px solid rgba(255,255,255,.10) !important;
+    max-width: min(78%, 520px);
+}
+
+
+/* ================================
+   TYPING
+================================ */
+
+.typing {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-left: 45px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    display: none;
+}
+
+.dots {
+    display: flex;
+
+    gap: 3px;
+}
+
+.dot {
+    width: 5px;
+    height: 5px;
+
+    background: #8b93a1;
+
+    border-radius: 50%;
+
+    animation: blink 1.2s infinite;
+}
+
+.dot:nth-child(2) {
+    animation-delay: .2s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: .4s;
+}
+
+@keyframes blink {
+
+    0%, 80%, 100% {
+        opacity: .3;
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+}
+
+
+/* ================================
+   INPUT
+================================ */
+
+.input-area {
+    padding: 12px 16px 12px;
+    background: rgba(24, 29, 34, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.footer-brand {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 2px 0 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.input-box {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.attachment-preview {
+    align-items: center;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: none;
+    gap: 10px;
+    max-width: 100%;
+    padding: 8px 10px;
+}
+
+.attachment-preview.show {
+    display: flex;
+}
+
+.attachment-preview img {
+    border-radius: 6px;
+    height: 52px;
+    object-fit: cover;
+    width: 52px;
+}
+
+.attachment-preview-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.attachment-preview-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attachment-preview-size {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.attachment-preview-remove {
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+}
+
+.attachment-preview-remove:hover {
+    color: var(--text);
+}
+
+.attach-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attach-btn:hover {
+    background: #303744;
+}
+
+.reply-composer {
+    align-items: center;
+    background: var(--panel2);
+    border-left: 3px solid var(--blue);
+    display: none;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 7px 10px;
+}
+
+.reply-composer.show {
+    display: flex;
+}
+
+.reply-composer-text {
+    flex: 1;
+    font-size: 12px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.reply-cancel {
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.message-input {
+    flex: 1;
+
+    resize: none;
+
+    min-height: 44px;
+    max-height: 140px;
+
+    background: var(--panel2);
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    transition: background .2s ease, box-shadow .2s ease;
+}
+
+.message-input:focus {
+    background: #252b36;
+    box-shadow: 0 0 0 2px rgba(76, 141, 255, .22);
+}
+
+.send-btn {
+    width: 42px;
+    height: 42px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: var(--green);
+
+    color: #07150e;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition: transform .2s ease, filter .2s ease;
+}
+
+.send-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.send-btn:active {
+    transform: translateY(0) scale(.96);
+}
+
+
+/* ================================
+   RIGHT PANEL
+================================ */
+
+.members {
+    background: rgba(23, 29, 37, 0.72);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 1px 0 0 rgba(255,255,255,0.04);
+}
+
+.members-header {
+    height: 74px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(23, 25, 28, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.members-title {
+    font-weight: bold;
+}
+
+.member-count {
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.member-list {
+    padding: 10px;
+
+    overflow-y: auto;
+}
+
+.member {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px;
+    margin: 2px 4px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.member:hover {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.03);
+}
+
+.member-avatar {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #303744;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-name {
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.member-role {
+    font-size: 11px;
+
+    color: var(--muted);
+
+    margin-top: 2px;
+}
+
+.online {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+}
+
+
+/* ================================
+   MODAL
+================================ */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.7);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 10;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 400px;
+    max-width: 90%;
+    background: linear-gradient(180deg, rgba(25, 29, 38, 0.82), rgba(18, 21, 26, 0.9));
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+}
+
+.modal-title {
+    font-size: 18px;
+
+    font-weight: bold;
+
+    margin-bottom: 15px;
+}
+
+.ai-option {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.ai-option:hover {
+    background: var(--panel2);
+}
+
+.ai-option input {
+    margin-left: auto;
+}
+
+.close-modal {
+    margin-top: 15px;
+
+    width: 100%;
+
+    padding: 10px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #303744;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.status-modal-box {
+    width: min(560px, 92vw);
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 18px 18px 14px;
+}
+
+#statusModalContent {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.status-type-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.status-type-btn {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel2);
+    color: var(--text);
+    cursor: pointer;
+    font: inherit;
+}
+
+.status-type-btn.active {
+    background: linear-gradient(135deg, #6ea237, #97c75a);
+    color: #10200c;
+    border-color: transparent;
+    font-weight: 700;
+}
+
+.status-media-preview {
+    display: none;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    background: #1a1f26;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.status-media-preview.show {
+    display: block;
+}
+
+.status-media-preview img,
+.status-media-preview video {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    background: #0c0f13;
+}
+
+.status-media-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.02);
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.status-remove-media {
+    background: transparent;
+    color: var(--muted);
+    border: 0;
+    cursor: pointer;
+}
+
+.status-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 16px;
+    max-height: 52vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.status-thread-item {
+    background: linear-gradient(180deg, rgba(32, 37, 46, 0.56), rgba(24, 29, 35, 0.7));
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+.status-thread-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.status-thread-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f6d365, #fda085, #87cefa, #9b6cff);
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+}
+
+.status-thread-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.status-thread-author {
+    font-weight: 700;
+}
+
+.status-thread-time {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.status-thread-content {
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.status-thread-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.status-thread-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.status-thread-btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    border-radius: 8px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+}
+
+.status-thread-btn:hover {
+    background: rgba(255,255,255,0.04);
+}
+
+.status-thread-btn.delete {
+    color: #ffb7b7;
+    border-color: rgba(255, 123, 123, 0.4);
+}
+
+.status-thread-replies {
+    margin-top: 12px;
+    padding-left: 12px;
+    border-left: 2px solid rgba(118, 136, 180, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status-reply {
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.status-reply strong {
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.status-composer-box {
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.status-composer-box textarea {
+    width: 100%;
+    min-height: 88px;
+    resize: vertical;
+    background: rgba(255,255,255,0.035);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    padding: 12px 13px;
+    font: inherit;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.status-composer-box textarea:focus {
+    border-color: rgba(76, 141, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(76, 141, 255, 0.12);
+}
+
+.status-composer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.status-cancel-btn,
+.status-post-btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 9px 14px;
+    cursor: pointer;
+    font: inherit;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.status-cancel-btn {
+    background: #2d343d;
+    color: var(--text);
+}
+
+.status-post-btn {
+    background: linear-gradient(135deg, #6ea237, #97c75a);
+    color: #10200c;
+    font-weight: 700;
+}
+
+
+/* ================================
+   YOUTUBE
+================================ */
+
+.youtube-panel { display: none !important;
+    position: fixed;
+
+    right: 300px;
+
+    bottom: 85px;
+
+    width: 420px;
+
+    max-width: calc(100vw - 30px);
+
+    background: #11151c;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    padding: 10px;
+
+    display: none;
+
+    z-index: 5;
+}
+
+.youtube-panel.show {
+    display: block;
+}
+
+.youtube-input {
+    display: flex;
+
+    gap: 6px;
+
+    margin-bottom: 8px;
+}
+
+.youtube-input input {
+    flex: 1;
+
+    background: var(--panel2);
+
+    border: none;
+
+    outline: none;
+
+    color: white;
+
+    padding: 9px;
+
+    border-radius: 7px;
+}
+
+.youtube-input button {
+    border: none;
+
+    background: #ff0000;
+
+    color: white;
+
+    border-radius: 7px;
+
+    padding: 0 13px;
+
+    cursor: pointer;
+}
+
+.youtube-frame {
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    border: none;
+
+    border-radius: 8px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width: 1000px) {
+    .app {
+        grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(200px, 240px);
+    }
+
+    .members {
+        display: block;
+    }
+
+    .youtube-panel { display: none !important;
+        right: 20px;
+    }
+}
+
+@media(max-width: 700px) {
+    .app {
+        grid-template-columns: 1fr;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .sidebar {
+        display: flex;
+        width: 100%;
+        min-height: 0;
+        height: auto;
+    }
+
+    .members {
+        display: none;
+    }
+
+    .chat {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+
+    .sidebar-header {
+        padding: 0 12px;
+        height: 78px;
+    }
+
+    .footer-brand {
+        font-size: 9px;
+        letter-spacing: .06em;
+        margin: 0;
+        padding: 8px 10px;
+    }
+}
+
+
+/* ===== Prototype UX additions ===== */
+
+.chat {
+    min-height: 0;
+}
+
+.messages {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.chat-list {
+    min-height: 0;
+}
+
+.mention-menu {
+    position: absolute;
+    left: 16px;
+    bottom: 70px;
+    width: 285px;
+    max-height: 320px;
+    overflow-y: auto;
+    background: #191d26;
+    border: 1px solid #303744;
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.45);
+    z-index: 30;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(8px) scale(.98);
+    pointer-events: none;
+    padding: 7px;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+}
+
+.mention-menu.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.mention-title {
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #8b93a1;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.mention-option {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 9px;
+    cursor: pointer;
+    text-align: left;
+    transition: background .16s ease, transform .16s ease;
+}
+
+.mention-option:hover,
+.mention-option.selected {
+    background: #252b36;
+}
+
+.mention-option:hover {
+    transform: translateX(2px);
+}
+
+.mention-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #303744;
+    flex: 0 0 auto;
+}
+
+.mention-name {
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.mention-desc {
+    color: #8b93a1;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.group-item {
+    position: relative;
+}
+
+.group-badge {
+    margin-left: auto;
+    color: #8b93a1;
+    font-size: 10px;
+}
+
+.new-group-btn {
+    margin: 10px 12px 12px;
+    padding: 10px 12px;
+    border: 1px solid #303744;
+    border-radius: 8px;
+    background: #20252f;
+    color: white;
+    cursor: pointer;
+}
+
+.new-group-btn:hover {
+    background: #2a303b;
+}
+
+.youtube-page {
+    position: fixed;
+    inset: 0;
+    background: #0f1115;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+}
+
+.youtube-page.show {
+    display: flex;
+}
+
+.youtube-topbar {
+    height: 70px;
+    flex: 0 0 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 18px;
+    background: #151820;
+    border-bottom: 1px solid #2b303b;
+}
+
+.youtube-brand {
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.youtube-search {
+    flex: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    gap: 7px;
+}
+
+.youtube-search input {
+    flex: 1;
+    background: #20252f;
+    color: white;
+    border: 1px solid #303744;
+    outline: none;
+    padding: 11px 13px;
+    border-radius: 8px;
+}
+
+.youtube-search button,
+.youtube-close {
+    border: 0;
+    border-radius: 8px;
+    background: #303744;
+    color: white;
+    padding: 0 15px;
+    cursor: pointer;
+}
+
+.youtube-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.youtube-section-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.youtube-player-wrap {
+    display: none;
+    max-width: 900px;
+    margin: 0 auto 28px;
+}
+
+.youtube-player-wrap.show {
+    display: block;
+}
+
+.youtube-player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 12px;
+    background: black;
+}
+
+.youtube-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 16px;
+}
+
+.youtube-card {
+    background: #191d26;
+    border: 1px solid #2b303b;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .15s, background .15s;
+}
+
+.youtube-card:hover {
+    transform: translateY(-2px);
+    background: #20252f;
+}
+
+.youtube-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: #252a34;
+}
+
+.youtube-card-body {
+    padding: 11px;
+}
+
+.youtube-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.youtube-card-meta {
+    color: #8b93a1;
+    font-size: 11px;
+    margin-top: 6px;
+}
+
+.youtube-empty {
+    color: #8b93a1;
+    padding: 25px 0;
+    text-align: center;
+}
+
+.status-story {
+    cursor: pointer;
+}
+
+/* ===== Refined product shell ===== */
+:root {
+    --bg: #101214;
+    --sidebar: #17191c;
+    --panel: #1d2024;
+    --panel2: #24282d;
+    --border: #30343a;
+    --text: #f4f1eb;
+    --muted: #9a9a94;
+    --accent: #d8ff62;
+    --accent-ink: #182006;
+    --warm: #f0c58a;
+}
+
+body { font-family: "Trebuchet MS", "Segoe UI", sans-serif; background: #101214; }
+.app { grid-template-columns: 290px minmax(440px, 1fr) 270px; }
+.sidebar, .members { background: #17191c; }
+.sidebar-header, .chat-header, .members-header { height: 78px; }
+.logo { letter-spacing: -.03em; font-size: 17px; }
+.logo-icon, .group-avatar { background: var(--accent); color: var(--accent-ink); border-radius: 13px; }
+.search input, .message-input { border: 1px solid transparent; transition: border-color .2s, background .2s; }
+.search input:focus, .message-input:focus { border-color: #647536; }
+.chat-item { margin: 3px 10px; border-radius: 12px; padding: 12px 11px; }
+.chat-item.active { background: #292d2c; box-shadow: inset 3px 0 0 var(--accent); }
+.chat-item:hover { background: #222629; }
+.new-group-btn { border-color: #3b4144; background: transparent; color: var(--accent); }
+.new-group-btn:hover { background: #242a29; }
+.chat { background: radial-gradient(circle at 75% 0%, rgba(216,255,98,.06), transparent 33%), #101214; }
+.chat-header { background: rgba(29,32,36,.88); backdrop-filter: blur(18px); }
+.group-name, .members-title { letter-spacing: -.02em; }
+.icon-btn { background: #2a2f31; border: 1px solid #3b4244; }
+.icon-btn:hover { background: #3b4244; }
+.messages { padding: 28px clamp(18px, 4vw, 58px); gap: 18px; }
+.bubble { background: #24292c; border: 1px solid #30363a; border-radius: 5px 15px 15px 15px; }
+.user .bubble { background: linear-gradient(135deg, #6ea237, #97c75a); border-color: rgba(255,255,255,.10); color: #f7ffe1; border-radius: 16px 16px 6px 16px; }
+.message.error .bubble { background: #342526; border-color: #704244; color: #ffc9c9; }
+.message.system .bubble { background: #242a27; border-color: #3d5145; color: #c8d8ca; }
+.input-area { background: rgba(29,32,36,.92); padding: 16px clamp(16px, 4vw, 58px) 20px; }
+.message-input { background: #25292c; border-color: #363d3f; }
+.send-btn { background: var(--accent); color: var(--accent-ink); border-radius: 12px; }
+.member { border-radius: 10px; }
+.member:hover { background: #24282a; }
+.online { background: var(--accent); box-shadow: 0 0 0 3px rgba(216,255,98,.1); }
+.sidebar-nav { display: none; }
+.home-nav { display: none; }
+.home-nav.active { display: none; }
+.home-nav-icon { display: none; }
+
+.profile-entry { display: none; }
+.profile-avatar { align-items: center; background: var(--accent); border-radius: 50%; color: var(--accent-ink); display: flex; flex: 0 0 auto; font-size: 18px; height: 38px; justify-content: center; width: 38px; }
+.profile-summary { min-width: 0; }
+.profile-name, .profile-username { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.profile-name { font-size: 13px; font-weight: 700; }
+.profile-username { color: var(--muted); font-size: 11px; margin-top: 2px; }
+.profile-settings-icon { color: var(--muted); font-size: 17px; margin-left: auto; }
+.settings-modal-box { max-height: min(720px, 90vh); overflow-y: auto; width: 470px; }
+.settings-profile-head { align-items: center; display: flex; gap: 14px; margin-bottom: 20px; }
+.settings-avatar { align-items: center; background: var(--accent); border-radius: 50%; color: var(--accent-ink); display: flex; font-size: 30px; height: 68px; justify-content: center; width: 68px; }
+.settings-section-title { color: var(--muted); font-size: 11px; letter-spacing: .1em; margin: 18px 0 8px; text-transform: uppercase; }
+.settings-field { display: block; margin-top: 11px; }
+.settings-field span { color: var(--muted); display: block; font-size: 12px; margin-bottom: 5px; }
+.settings-field input, .settings-field textarea { background: var(--panel2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font: inherit; outline: none; padding: 10px 11px; width: 100%; }
+.settings-field textarea { min-height: 78px; resize: vertical; }
+.settings-field input:focus, .settings-field textarea:focus { border-color: var(--accent); }
+.theme-grid { display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.theme-option { align-items: center; background: var(--panel2); border: 1px solid var(--border); border-radius: 9px; color: var(--text); cursor: pointer; display: flex; gap: 9px; padding: 9px; text-align: left; }
+.theme-option:hover, .theme-option.active { border-color: var(--accent); }
+.theme-swatch { border-radius: 6px; flex: 0 0 auto; height: 28px; width: 38px; }
+.theme-label { font-size: 12px; }
+.theme-option[data-theme="midnight"] .theme-swatch { background: #26334a; }
+.theme-option[data-theme="forest"] .theme-swatch { background: #29443c; }
+.theme-option[data-theme="ocean"] .theme-swatch { background: #23475a; }
+.theme-option[data-theme="rose"] .theme-swatch { background: #543943; }
+.settings-cancel { background: transparent; border: 0; color: var(--muted); cursor: pointer; display: block; margin: 12px auto 0; }
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .72;
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(255,255,255,.055), transparent 20%),
+        radial-gradient(circle at 80% 15%, rgba(255,255,255,.04), transparent 24%),
+        linear-gradient(135deg, rgba(255,255,255,.028) 0, rgba(255,255,255,.028) 1px, transparent 1px, transparent 9px);
+    background-size: 260px 260px, 300px 300px, 12px 12px;
+    background-position: center;
+}
+.app { position: relative; z-index: 1; }
+.youtube-page { position: fixed !important; inset: 0; z-index: 50; }
+body[data-theme="midnight"] {
+    --bg: #0d1116;
+    --bg-2: #121a22;
+    --sidebar: #171d25;
+    --panel: #1d252e;
+    --panel2: #222d39;
+    --panel-soft: #2a3641;
+    --border: #374552;
+    --text: #eef3f8;
+    --muted: #a7b4c2;
+    --primary: #d8ff62;
+    --secondary: #8fe3ff;
+    --tertiary: #c39dff;
+    --accent: var(--primary);
+    --accent-ink: #1a260e;
+    --texture-a: rgba(216,255,98,0.10);
+    --texture-b: rgba(143,227,255,0.08);
+    --texture-c: rgba(195,157,255,0.07);
+}
+body[data-theme="forest"] {
+    --bg: #0d1714;
+    --bg-2: #14241d;
+    --sidebar: #182b25;
+    --panel: #1d362f;
+    --panel2: #244037;
+    --panel-soft: #2b4d42;
+    --border: #3d5d52;
+    --text: #edf9f0;
+    --muted: #adcab7;
+    --primary: #b8f4a6;
+    --secondary: #f0d28a;
+    --tertiary: #8ad9c8;
+    --accent: var(--primary);
+    --accent-ink: #1a2d1f;
+    --texture-a: rgba(184,244,166,0.12);
+    --texture-b: rgba(240,210,138,0.10);
+    --texture-c: rgba(138,217,200,0.07);
+}
+body[data-theme="ocean"] {
+    --bg: #0c1922;
+    --bg-2: #102a38;
+    --sidebar: #142f3d;
+    --panel: #1a3a4d;
+    --panel2: #234a5d;
+    --panel-soft: #2a596d;
+    --border: #38657a;
+    --text: #ebf9ff;
+    --muted: #aac7d3;
+    --primary: #7ad8ff;
+    --secondary: #8be8b6;
+    --tertiary: #d5c0ff;
+    --accent: var(--primary);
+    --accent-ink: #0d2d3a;
+    --texture-a: rgba(122,216,255,0.12);
+    --texture-b: rgba(139,232,182,0.09);
+    --texture-c: rgba(213,192,255,0.08);
+}
+body[data-theme="rose"] {
+    --bg: #1a1216;
+    --bg-2: #2b1e23;
+    --sidebar: #2d1c23;
+    --panel: #3b2730;
+    --panel2: #4b2f3b;
+    --panel-soft: #5d3f4a;
+    --border: #6e4b58;
+    --text: #fff2f6;
+    --muted: #d0b2b8;
+    --primary: #f7b5c0;
+    --secondary: #ffd7a8;
+    --tertiary: #d9c2ff;
+    --accent: var(--primary);
+    --accent-ink: #3a1a21;
+    --texture-a: rgba(247,181,192,0.12);
+    --texture-b: rgba(255,215,168,0.10);
+    --texture-c: rgba(217,194,255,0.08);
+}
+body[data-theme] .sidebar, body[data-theme] .members, body[data-theme] .chat, body[data-theme] .input-area {
+    background-image:
+        radial-gradient(circle at 15% 25%, var(--texture-a), transparent 22%),
+        radial-gradient(circle at 85% 10%, var(--texture-b), transparent 24%),
+        linear-gradient(135deg, var(--texture-c) 0, var(--texture-c) 1px, transparent 1px, transparent 9px);
+    background-size: 260px 260px, 320px 320px, 12px 12px;
+}
+body[data-theme] .sidebar, body[data-theme] .members { background-color: var(--sidebar); }
+body[data-theme] .chat { background-color: var(--bg); }
+body[data-theme] .input-area { background-color: var(--panel); }
+@media(max-width: 700px) { .profile-entry { display: none; } }
+
+/* ===== Full YouTube home ===== */
+.youtube-page {
+    background: #111315;
+    color: var(--text);
+    position: fixed !important;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+}
+.youtube-page.show { display: flex; }
+.youtube-topbar { height: 76px; flex-basis: 76px; padding: 0 28px; background: rgba(17,19,21,.94); border-bottom: 1px solid #292d30; }
+.youtube-brand { display: flex; align-items: center; gap: 10px; font-size: 18px; letter-spacing: -.04em; }
+.youtube-brand::before { content: "▶"; display: grid; place-items: center; width: 31px; height: 22px; border-radius: 7px; background: #f5f1e9; color: #141619; font-size: 12px; }
+.youtube-search { max-width: 620px; }
+.youtube-search input { height: 42px; border-radius: 9px; background: #202427; border: 1px solid #3a4042; padding: 0 15px; }
+.youtube-search input:focus { border-color: var(--accent); }
+.youtube-search button { width: 48px; padding: 0; font-size: 0; background: #292e30; }
+.youtube-search button::after { content: "⌕"; font-size: 22px; color: #d7d8d0; }
+.youtube-close { background: transparent; color: #a7aaa3; border: 1px solid #363c3e; height: 38px; }
+.youtube-close:hover { color: var(--text); background: #272c2e; }
+.youtube-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: 0; flex: 1; }
+.youtube-sidebar { padding: 20px 14px; border-right: 1px solid #292d30; }
+.youtube-side-label { padding: 8px 12px 12px; color: #777c79; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.youtube-side-item { width: 100%; display: flex; gap: 12px; align-items: center; border: 0; background: transparent; color: #bfc3bd; padding: 12px; border-radius: 9px; cursor: pointer; text-align: left; font: inherit; }
+.youtube-side-item.active, .youtube-side-item:hover { background: #292e2f; color: #f3f2ea; }
+.youtube-side-item.active { color: var(--accent); }
+.youtube-content { padding: 30px clamp(18px, 4vw, 48px); }
+.youtube-kicker { color: var(--accent); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.youtube-section-title { font-size: clamp(25px, 3vw, 38px); letter-spacing: -.06em; font-weight: 700; margin: 7px 0 19px; }
+.youtube-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 25px; }
+.youtube-chip { border: 1px solid #373d3e; background: #202427; color: #bfc3bb; border-radius: 100px; padding: 8px 14px; cursor: pointer; white-space: nowrap; font: inherit; font-size: 12px; }
+.youtube-chip.active, .youtube-chip:hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.youtube-results { grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 28px 18px; }
+.youtube-card { background: transparent; border: 0; border-radius: 10px; overflow: visible; }
+.youtube-card:hover { transform: translateY(-3px); background: transparent; }
+.youtube-thumb-wrap { position: relative; overflow: hidden; border-radius: 9px; background: #252a2c; aspect-ratio: 16 / 9; }
+.youtube-thumb { display: block; border-radius: 0; transition: transform .25s ease; }
+.youtube-card:hover .youtube-thumb { transform: scale(1.035); }
+.youtube-card-body { padding: 11px 2px 0; }
+.youtube-card-title { font-size: 14px; line-height: 1.4; letter-spacing: -.015em; }
+.youtube-card-meta { font-size: 12px; margin-top: 8px; line-height: 1.5; }
+.youtube-card-meta strong { color: #c9cdc5; font-weight: 500; }
+.youtube-duration { position: absolute; right: 8px; bottom: 8px; padding: 3px 5px; border-radius: 4px; background: rgba(0,0,0,.78); font-size: 10px; }
+.youtube-empty { color: #9fa49d; min-height: 180px; display: grid; place-items: center; }
+.youtube-player-wrap { max-width: 980px; margin: 0 auto 28px; }
+@media(max-width: 1000px) { .app { grid-template-columns: 240px 1fr; } .youtube-layout { grid-template-columns: 180px 1fr; } }
+@media(max-width: 700px) { .app { grid-template-columns: 1fr; } .sidebar { display: flex; position: fixed; z-index: 4; inset: auto 0 0; height: 66px; border-top: 1px solid var(--border); border-right: 0; } .sidebar-header, .search, .chat-list { display: none; } .sidebar-nav { width: 100%; border: 0; padding: 7px 10px; } .home-nav { justify-content: center; } .home-nav span:last-child { display: none; } .youtube-topbar { padding: 0 12px; } .youtube-sidebar { display: none; } .youtube-layout { display: block; } .youtube-content { padding: 22px 14px 90px; } .youtube-results { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 10px; } .youtube-card-title { font-size: 12px; } .youtube-card-meta { font-size: 10px; } }
+
+@media(max-width: 700px) {
+    .mention-menu {
+        left: 8px;
+        right: 8px;
+        width: auto;
+    }
+
+    .youtube-topbar {
+        gap: 7px;
+        padding: 0 9px;
+    }
+
+    .youtube-brand {
+        display: none;
+    }
+
+    .youtube-content {
+        padding: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- ==========================================
+         LEFT SIDEBAR
+    =========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <div class="logo" onclick="openSettings()" role="button" tabindex="0" onkeydown="if (event.key === 'Enter' || event.key === ' ') openSettings()">
+
+                <div class="logo-icon">
+                    AI
+                </div>
+
+                <div class="profile-summary">
+                    <div class="profile-name" id="profileNameTop">Marco</div>
+                    <div class="profile-username" id="profileUsernameTop">@marco</div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="status-area">
+            <div class="status-header">
+                <div class="status-header-label">Status</div>
+                <button class="status-new-btn" type="button" onclick="openStatusModal()">+ New</button>
+            </div>
+            <div class="status-strip" id="statusStrip"></div>
+        </div>
+
+        <div class="chat-list">
+
+            <div class="chat-item active">
+
+                <div class="chat-avatar">
+                    🤖
+                </div>
+
+                <div class="chat-info">
+
+                    <div class="chat-name">
+                        AI Syndicate
+                    </div>
+
+                    <div class="chat-last">
+                        4 AI members
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="chat-item">
+
+                <div class="chat-avatar">
+                    💻
+                </div>
+
+                <div class="chat-info">
+
+                    <div class="chat-name">
+                        Programming Team
+                    </div>
+
+                    <div class="chat-last">
+                        Ollama: Here's the solution...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="chat-item">
+
+                <div class="chat-avatar">
+                    📚
+                </div>
+
+                <div class="chat-info">
+
+                    <div class="chat-name">
+                        Study Group
+                    </div>
+
+                    <div class="chat-last">
+                        Gemini: Let's break this down...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button class="sidebar-watchstream" type="button" onclick="openYoutubePage()" title="Watchstream" aria-label="Watchstream">
+            <span class="sidebar-watchstream-icon" aria-hidden="true">▶</span>
+            <span class="sidebar-watchstream-label">Watchstream</span>
+        </button>
+
+    </aside>
+
+
+
+    <!-- ==========================================
+         CHAT
+    =========================================== -->
+
+    <main class="chat">
+
+
+        <header class="chat-header">
+
+            <div class="group-header">
+                <div class="group-info">
+
+                    <div class="group-avatar">
+                        🤖
+                    </div>
+
+                    <div>
+                        <div class="group-name">
+                            AI Syndicate
+                        </div>
+
+                        <div class="group-members">
+                            5 members
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-buttons">
+                <button
+                    class="icon-btn"
+                    onclick="openInvite()"
+                    title="Invite AI"
+                >
+                    +
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==========================================
+             MESSAGES
+        =========================================== -->
+
+        <div
+            class="messages"
+            id="messages"
+        >
+
+            <div class="message">
+
+                <div class="avatar">
+                    🤖
+                </div>
+
+                <div class="message-content">
+
+                    <div class="sender">
+                        Gemini
+                    </div>
+
+                    <div class="bubble">
+                        Halo Marco. Aku GPT. Kamu bisa memanggil AI tertentu menggunakan @namaAI atau menggunakan @all untuk memanggil semua AI.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="message">
+
+                <div class="avatar">
+                    🧠
+                </div>
+
+                <div class="message-content">
+
+                    <div class="sender">
+                        Gemini
+                    </div>
+
+                    <div class="bubble">
+                        AI lain juga bisa diberikan context dari jawaban AI sebelumnya. Jadi percakapannya tidak harus terisolasi.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="message">
+
+                <div class="avatar">
+                    🧑‍💻
+                </div>
+
+                <div class="message-content">
+
+                    <div class="sender">
+                        Claude
+                    </div>
+
+                    <div class="bubble">
+                        Misalnya Gemini memberikan solusi awal, kemudian kamu bisa meminta AI lain mengkritik solusi tersebut.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- TYPING -->
+
+        <div
+            class="typing"
+            id="typing"
+        >
+
+            <div class="dots">
+
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+
+            </div>
+
+            AI is thinking...
+
+        </div>
+
+
+        <!-- ==========================================
+             INPUT
+        =========================================== -->
+
+        <div class="input-area">
+
+            <div class="reply-composer" id="replyComposer">
+                <div class="reply-composer-text" id="replyComposerText"></div>
+                <button class="reply-cancel" type="button" onclick="clearReply()" title="Cancel reply">×</button>
+            </div>
+
+            <div class="attachment-preview" id="attachmentPreview" aria-live="polite"></div>
+
+            <div class="input-box">
+
+                <input id="fileInput" type="file" hidden>
+                <button class="attach-btn" type="button" onclick="document.getElementById('fileInput').click()" title="Attach file">📎</button>
+
+                <textarea
+                    id="messageInput"
+                    class="message-input"
+                    placeholder="Type a message... @Gemini @Groq @Ollama @all"
+                    rows="1"
+                ></textarea>
+
+
+                <button
+                    class="send-btn"
+                    onclick="sendMessage()"
+                >
+                    ➤
+                </button>
+
+            </div>
+
+            <div class="footer-brand">AI Syndicate - Synco ~ Fransiscus Natadhika Joe Marco</div>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ==========================================
+         MEMBERS
+    =========================================== -->
+
+    <aside class="members">
+
+        <div class="members-header">
+
+            <div>
+
+                <div class="members-title">
+                    Members
+                </div>
+
+                <div
+                    class="member-count"
+                    id="memberCount"
+                >
+                    4 members
+                </div>
+
+            </div>
+
+            <button
+                class="icon-btn"
+                onclick="openInvite()"
+            >
+                +
+            </button>
+
+        </div>
+
+
+        <div
+            class="member-list"
+            id="memberList"
+        >
+
+            <div class="member">
+
+                <div class="member-avatar">
+                    👤
+                </div>
+
+                <div class="member-info">
+
+                    <div class="member-name">
+                        Marco
+                    </div>
+
+                    <div class="member-role">
+                        You
+                    </div>
+
+                </div>
+
+                <div class="online"></div>
+
+            </div>
+
+
+            <div class="member">
+
+                <div class="member-avatar">
+                    🤖
+                </div>
+
+                <div class="member-info">
+
+                    <div class="member-name">
+                        GPT
+                    </div>
+
+                    <div class="member-role">
+                        Google
+                    </div>
+
+                </div>
+
+                <div class="online"></div>
+
+            </div>
+
+
+            <div class="member">
+
+                <div class="member-avatar">
+                    🧠
+                </div>
+
+                <div class="member-info">
+
+                    <div class="member-name">
+                        Gemini
+                    </div>
+
+                    <div class="member-role">
+                        Google
+                    </div>
+
+                </div>
+
+                <div class="online"></div>
+
+            </div>
+
+
+            <div class="member">
+
+                <div class="member-avatar">
+                    🎭
+                </div>
+
+                <div class="member-info">
+
+                    <div class="member-name">
+                        Claude
+                    </div>
+
+                    <div class="member-role">
+                        Local AI
+                    </div>
+
+                </div>
+
+                <div class="online"></div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+</div>
+
+<div class="modal" id="settingsModal">
+    <div class="modal-box settings-modal-box">
+        <div class="modal-title">Profile & Settings</div>
+        <div class="settings-profile-head">
+            <div class="settings-avatar" id="settingsAvatar">👤</div>
+            <div>
+                <div class="profile-name" id="settingsPreviewName">Marco</div>
+                <div class="profile-username" id="settingsPreviewUsername">@marco</div>
+            </div>
+        </div>
+        <input id="profilePhotoInput" type="file" accept="image/*" hidden>
+        <div class="settings-section-title">Profile</div>
+        <label class="settings-field"><span>Display name</span><input id="profileNameInput" maxlength="40" autocomplete="name"></label>
+        <label class="settings-field"><span>Username</span><input id="profileUsernameInput" maxlength="24" autocomplete="username" placeholder="username"></label>
+        <label class="settings-field"><span>Bio</span><textarea id="profileBioInput" maxlength="160" placeholder="Tell people a little about you..."></textarea></label>
+        <div class="settings-avatar-row">
+            <button class="upload-avatar-btn" id="uploadProfilePhotoBtn" type="button">Upload photo</button>
+            <button class="remove-avatar-btn" id="removeProfilePhotoBtn" type="button">Remove</button>
+        </div>
+        <div class="settings-section-title">Theme</div>
+        <div class="theme-grid" id="themeOptions">
+            <button class="theme-option" type="button" data-theme="midnight"><span class="theme-swatch"></span><span class="theme-label">Midnight paper</span></button>
+            <button class="theme-option" type="button" data-theme="forest"><span class="theme-swatch"></span><span class="theme-label">Quiet forest</span></button>
+            <button class="theme-option" type="button" data-theme="ocean"><span class="theme-swatch"></span><span class="theme-label">Deep ocean</span></button>
+            <button class="theme-option" type="button" data-theme="rose"><span class="theme-swatch"></span><span class="theme-label">Warm rose</span></button>
+        </div>
+        <button class="close-modal" type="button" onclick="saveSettings()">Save changes</button>
+        <button class="settings-cancel" type="button" onclick="closeSettings()">Cancel</button>
+    </div>
+</div>
+
+<div class="modal" id="statusModal">
+    <div class="modal-box status-modal-box">
+        <div class="modal-title">Status</div>
+        <div id="statusModalContent"></div>
+        <div class="status-composer-box">
+            <div class="status-type-toggle">
+                <button class="status-type-btn active" type="button" data-status-type="thread">Thread</button>
+                <button class="status-type-btn" type="button" data-status-type="photo">Photo</button>
+                <button class="status-type-btn" type="button" data-status-type="video">Video</button>
+            </div>
+
+            <div class="status-media-preview" id="statusMediaPreview">
+                <div id="statusMediaPreviewInner"></div>
+                <div class="status-media-toolbar">
+                    <span id="statusMediaName">No media selected</span>
+                    <button class="status-remove-media" type="button" onclick="clearStatusMedia()">Remove</button>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                <input id="statusPhotoInput" type="file" accept="image/*" hidden>
+                <input id="statusVideoInput" type="file" accept="video/*" hidden>
+                <button type="button" class="status-cancel-btn" onclick="document.getElementById('statusPhotoInput').click()">Add photo</button>
+                <button type="button" class="status-cancel-btn" onclick="document.getElementById('statusVideoInput').click()">Add video</button>
+            </div>
+
+            <textarea id="statusComposerInput" placeholder="Share a quick thought, update, or thread for your friends..." maxlength="280"></textarea>
+            <div class="status-composer-actions">
+                <button type="button" class="status-cancel-btn" onclick="closeStatusModal()">Close</button>
+                <button type="button" class="status-post-btn" onclick="publishStatus()">Post</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ==========================================
+     INVITE MODAL
+=========================================== -->
+
+<div
+    class="modal"
+    id="inviteModal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            Invite AI
+        </div>
+
+
+        <label class="ai-option">
+
+            �
+
+            <span>
+                Gemini
+            </span>
+
+            <input
+                type="checkbox"
+                checked
+                onchange="toggleAI('Gemini', this.checked)"
+            >
+
+        </label>
+
+
+        <label class="ai-option">
+
+            ⚡
+
+            <span>
+                Groq
+            </span>
+
+            <input
+                type="checkbox"
+                checked
+                onchange="toggleAI('Groq', this.checked)"
+            >
+
+        </label>
+
+
+        <label class="ai-option">
+
+            🦙
+
+            <span>
+                Ollama
+            </span>
+
+            <input
+                type="checkbox"
+                checked
+                onchange="toggleAI('Ollama', this.checked)"
+            >
+
+        </label>
+
+
+        <button
+            class="close-modal"
+            onclick="closeInvite()"
+        >
+            Done
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     YOUTUBE
+=========================================== -->
+
+<div
+    class="youtube-panel"
+    id="youtubePanel"
+>
+
+    <div class="youtube-input">
+
+        <input
+            id="youtubeUrl"
+            placeholder="Paste YouTube URL..."
+        >
+
+        <button onclick="loadYoutube()">
+            Play
+        </button>
+
+    </div>
+
+
+    <iframe
+        id="youtubeFrame"
+        class="youtube-frame"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+    ></iframe>
+
+</div>
+
+
+
+<script>
+/* =========================================================
+   AI SYNDICATE - FRONTEND
+   IMPORTANT: API KEYS ARE NO LONGER STORED HERE.
+   The browser talks to Node/Express through /api/*.
+========================================================= */
+
+const aiCatalog = {
+    Gemini: { emoji: "🧠", provider: "Google Gemini" },
+    Groq: { emoji: "⚡", provider: "Groq" },
+    Ollama: { emoji: "🦙", provider: "Local Ollama" }
+};
+
+const statusPosts = [
+    {
+        id: "status-1",
+        author: "Marco",
+        username: "@marco",
+        emoji: "👤",
+        time: "2m ago",
+        type: "thread",
+        text: "Hari ini fokus nyicil ide produk: bikin status yang bisa seperti thread, bukan cuma foto atau video. Kira-kira siapa yang mau kirim update panjang di sini?",
+        likes: 148,
+        replies: [
+            { author: "Gemini", text: "Bisa banget. Ini bisa jadi bentuk update cepat, seperti thread personal di X." },
+            { author: "Groq", text: "Cocok untuk insight, bukan hanya konten visual." }
+        ]
+    },
+    {
+        id: "status-2",
+        author: "Gemini",
+        username: "@gemini",
+        emoji: "🧠",
+        time: "18m ago",
+        type: "photo",
+        text: "Progres desain status baru — ini mode foto untuk update visual cepat dan lebih hidup.",
+        media: {
+            src: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1200&q=80",
+            name: "design-status.jpg"
+        },
+        likes: 92,
+        replies: [
+            { author: "Marco", text: "Setuju. Formatnya harus tetap ringkas tapi punya konteks." }
+        ]
+    },
+    {
+        id: "status-3",
+        author: "Ollama",
+        username: "@ollama",
+        emoji: "🦙",
+        time: "1h ago",
+        type: "video",
+        text: "Demo update kerja lokal: status video singkat ini cocok untuk progress, walkthrough, dan update proyek yang butuh penjelasan cepat.",
+        media: {
+            src: "https://www.w3schools.com/html/mov_bbb.mp4",
+            name: "demo-progress.mp4"
+        },
+        likes: 66,
+        replies: []
+    }
+];
+
+const statusComposerState = {
+    type: "thread",
+    media: null
+};
+
+let editingStatusId = null;
+
+const state = {
+    currentGroupId: "ai-syndicate",
+    groups: {
+        "ai-syndicate": {
+            id: "ai-syndicate",
+            name: "AI Syndicate",
+            emoji: "🤖",
+            messages: [
+                { sender: "Gemini", content: "Halo Marco. Tekan @Gemini, @Groq, atau @Ollama untuk memanggil AI tertentu." },
+                { sender: "Groq", content: "Gunakan @all kalau kamu ingin semua AI ikut menjawab dalam satu percakversation." },
+                { sender: "Ollama", content: "Ollama berjalan lokal di komputer ini dan siap dipakai tanpa koneksi internet." }
+            ],
+            members: ["Gemini", "Groq", "Ollama"]
+        },
+        "programming": {
+            id: "programming",
+            name: "Programming Team",
+            emoji: "💻",
+            messages: [{ sender: "System", content: "Programming Team siap digunakan." }],
+            members: ["Gemini", "Groq", "Ollama"]
+        },
+        "study": {
+            id: "study",
+            name: "Study Group",
+            emoji: "📚",
+            messages: [{ sender: "System", content: "Study Group siap digunakan." }],
+            members: ["Gemini", "Ollama"]
+        }
+    },
+    files: [],
+    searchHistory: [],
+    youtubeCache: loadYoutubeCache()
+};
+
+const profileDefaults = {
+    name: "Marco",
+    username: "marco",
+    bio: "",
+    avatar: ""
+};
+
+const settingsState = {
+    profile: loadStoredValue("ai-syndicate-profile", profileDefaults),
+    theme: loadStoredValue("ai-syndicate-theme", "midnight")
+};
+
+const messagesEl = document.getElementById("messages");
+const inputEl = document.getElementById("messageInput");
+const typingEl = document.getElementById("typing");
+const memberListEl = document.getElementById("memberList");
+const memberCountEl = document.getElementById("memberCount");
+const chatListEl = document.querySelector(".chat-list");
+const groupNameEl = document.querySelector(".group-name");
+const groupMembersEl = document.querySelector(".group-members");
+const groupAvatarEl = document.querySelector(".group-avatar");
+const membersPanelEl = document.querySelector(".members");
+let mentionMenu;
+let mentionSelectedIndex = 0;
+let mentionOptions = [];
+let pendingAttachment = null;
+let replyTo = null;
+
+window.addEventListener("DOMContentLoaded", init);
+
+async function init() {
+    applyTheme(settingsState.theme);
+    renderProfile();
+    setupThemeOptions();
+    setupProfilePhotoControls();
+    renderStatusStrip();
+    setupStatusComposer();
+    await hydratePersistedState();
+    buildGroupList();
+    renderCurrentGroup();
+    updateMembers();
+    buildInviteModal();
+    createMentionMenu();
+    createYoutubePage();
+    setupGroupSearch();
+    setupInput();
+    setupFileInput();
+}
+
+function setupStatusComposer() {
+    document.querySelectorAll(".status-type-btn").forEach(button => {
+        button.addEventListener("click", () => setStatusType(button.dataset.statusType));
+    });
+
+    const photoInput = document.getElementById("statusPhotoInput");
+    const videoInput = document.getElementById("statusVideoInput");
+
+    photoInput?.addEventListener("change", event => {
+        const file = event.target.files?.[0];
+        if (file) {
+            statusComposerState.type = "photo";
+            setStatusType("photo");
+            attachStatusMedia(file);
+        }
+        event.target.value = "";
+    });
+
+    videoInput?.addEventListener("change", event => {
+        const file = event.target.files?.[0];
+        if (file) {
+            statusComposerState.type = "video";
+            setStatusType("video");
+            attachStatusMedia(file);
+        }
+        event.target.value = "";
+    });
+}
+
+async function hydratePersistedState() {
+    try {
+        const response = await fetch("/api/store");
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.success || !data.data) return;
+
+        if (data.data.groups && Object.keys(data.data.groups).length) {
+            state.groups = { ...state.groups, ...data.data.groups };
+        }
+        if (data.data.files && Array.isArray(data.data.files)) {
+            state.files = data.data.files;
+        }
+        if (data.data.searchHistory && Array.isArray(data.data.searchHistory)) {
+            state.searchHistory = data.data.searchHistory;
+        }
+    } catch {
+        // Ignore persistence failures and keep the in-memory defaults.
+    }
+}
+
+async function persistAppState() {
+    try {
+        await fetch("/api/store", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                groups: state.groups,
+                files: state.files,
+                searchHistory: state.searchHistory
+            })
+        });
+    } catch {
+        // Ignore persistence failures silently.
+    }
+}
+
+function loadStoredValue(key, fallback) {
+    try {
+        const value = JSON.parse(localStorage.getItem(key));
+        return value ?? fallback;
+    } catch {
+        return fallback;
+    }
+}
+
+function persistSettings() {
+    localStorage.setItem("ai-syndicate-profile", JSON.stringify(settingsState.profile));
+    localStorage.setItem("ai-syndicate-theme", JSON.stringify(settingsState.theme));
+}
+
+function renderProfile() {
+    const profile = settingsState.profile;
+    const username = String(profile.username || "marco").replace(/^@/, "") || "marco";
+    const avatar = profile.avatar || "";
+    const name = profile.name || "Marco";
+
+    const profileNameEl = document.getElementById("profileName");
+    const profileUsernameEl = document.getElementById("profileUsername");
+    const profileNameTopEl = document.getElementById("profileNameTop");
+    const profileUsernameTopEl = document.getElementById("profileUsernameTop");
+    const settingsPreviewNameEl = document.getElementById("settingsPreviewName");
+    const settingsPreviewUsernameEl = document.getElementById("settingsPreviewUsername");
+
+    if (profileNameEl) profileNameEl.textContent = name;
+    if (profileUsernameEl) profileUsernameEl.textContent = `@${username}`;
+    if (profileNameTopEl) profileNameTopEl.textContent = name;
+    if (profileUsernameTopEl) profileUsernameTopEl.textContent = `@${username}`;
+    if (settingsPreviewNameEl) settingsPreviewNameEl.textContent = name;
+    if (settingsPreviewUsernameEl) settingsPreviewUsernameEl.textContent = `@${username}`;
+
+    setProfileAvatar(document.getElementById("profileAvatar"), avatar, "👤");
+    setProfileAvatar(document.getElementById("settingsAvatar"), avatar, "👤");
+}
+
+function renderStatusStrip() {
+    const strip = document.getElementById("statusStrip");
+    if (!strip) return;
+
+    strip.innerHTML = statusPosts.map(post => {
+        const previewText = post.text ? post.text.slice(0, 18) : "Update";
+        const typeIcon = post.type === "photo" ? "🖼️" : post.type === "video" ? "🎬" : "✍️";
+        return `
+            <button class="status-card" type="button" data-status-id="${post.id}" aria-label="Open ${escapeHTML(post.author)} status">
+                <div class="status-avatar-wrap">
+                    <div class="status-avatar">${escapeHTML(post.emoji)}</div>
+                </div>
+                <div class="status-name">${escapeHTML(post.author)}</div>
+                <div class="status-preview">${escapeHTML(typeIcon + " " + previewText)}${post.text.length > 18 ? "..." : ""}</div>
+            </button>
+        `;
+    }).join("");
+
+    strip.querySelectorAll(".status-card").forEach(button => {
+        button.addEventListener("click", () => openStatusModal(button.dataset.statusId));
+    });
+}
+
+function openStatusModal(statusId = null) {
+    const modal = document.getElementById("statusModal");
+    const content = document.getElementById("statusModalContent");
+    if (!modal || !content) return;
+
+    const post = statusId ? statusPosts.find(item => item.id === statusId) : statusPosts[0];
+    if (!post) {
+        modal.classList.add("show");
+        content.innerHTML = "<div class='status-thread-item'>Belum ada update status.</div>";
+        return;
+    }
+
+    const mediaMarkup = post.type === "photo" && post.media?.src
+        ? `<img src="${post.media.src}" alt="${escapeHTML(post.media.name || "status image")}" />`
+        : post.type === "video" && post.media?.src
+            ? `<video controls playsinline src="${post.media.src}"></video>`
+            : "";
+
+    content.innerHTML = `
+        <div class="status-thread">
+            <div class="status-thread-item">
+                <div class="status-thread-head">
+                    <div class="status-thread-avatar">${escapeHTML(post.emoji)}</div>
+                    <div class="status-thread-meta">
+                        <div class="status-thread-author">${escapeHTML(post.author)} <span style="color: var(--muted);">${escapeHTML(post.username)}</span></div>
+                        <div class="status-thread-time">${escapeHTML(post.time)}</div>
+                    </div>
+                </div>
+                ${mediaMarkup ? `<div class="status-media-preview show">${mediaMarkup}</div>` : ""}
+                <div class="status-thread-content">${escapeHTML(post.text)}</div>
+                <div class="status-thread-actions">
+                    <span>♡ ${post.likes}</span>
+                    <span>💬 ${post.replies.length}</span>
+                </div>
+                <div class="status-thread-toolbar">
+                    <button class="status-thread-btn" type="button" onclick="window.startEditStatus && window.startEditStatus('${post.id}')">Edit</button>
+                    <button class="status-thread-btn delete" type="button" onclick="window.deleteStatus && window.deleteStatus('${post.id}')">Delete</button>
+                </div>
+                <div class="status-thread-replies">
+                    ${post.replies.length
+                        ? post.replies.map(reply => `
+                            <div class="status-reply"><strong>${escapeHTML(reply.author)}:</strong>${escapeHTML(reply.text)}</div>
+                        `).join("")
+                        : "<div class='status-reply'><strong>AI:</strong>Belum ada balasan di thread ini.</div>"}
+                </div>
+            </div>
+        </div>
+    `;
+    modal.classList.add("show");
+}
+
+function startEditStatus(statusId) {
+    const post = statusPosts.find(item => item.id === statusId);
+    if (!post) return;
+
+    editingStatusId = statusId;
+    statusComposerState.type = post.type || "thread";
+    statusComposerState.media = post.media ? { ...post.media, src: post.media.src, type: post.media.type || (post.type === "photo" ? "image/jpeg" : "video/mp4") } : null;
+    const input = document.getElementById("statusComposerInput");
+    if (input) input.value = post.text || "";
+
+    setStatusType(statusComposerState.type);
+    renderStatusMediaPreview();
+    const modal = document.getElementById("statusModal");
+    if (modal) modal.classList.add("show");
+}
+
+function deleteStatus(statusId) {
+    const index = statusPosts.findIndex(item => item.id === statusId);
+    if (index === -1) return;
+
+    if (statusPosts[index].media?.src?.startsWith("blob:")) {
+        URL.revokeObjectURL(statusPosts[index].media.src);
+    }
+
+    statusPosts.splice(index, 1);
+    renderStatusStrip();
+
+    const modal = document.getElementById("statusModal");
+    if (modal) modal.classList.remove("show");
+
+    editingStatusId = null;
+    statusComposerState.type = "thread";
+    clearStatusMedia();
+    const input = document.getElementById("statusComposerInput");
+    if (input) input.value = "";
+    document.querySelectorAll(".status-type-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.statusType === "thread"));
+}
+
+function closeStatusModal() {
+    const modal = document.getElementById("statusModal");
+    if (modal) modal.classList.remove("show");
+    const input = document.getElementById("statusComposerInput");
+    if (input) input.value = "";
+    clearStatusMedia();
+    statusComposerState.type = "thread";
+    document.querySelectorAll(".status-type-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.statusType === "thread"));
+}
+
+function setStatusType(type) {
+    statusComposerState.type = type;
+    document.querySelectorAll(".status-type-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.statusType === type);
+    });
+    if (type === "thread") {
+        clearStatusMedia();
+    }
+}
+
+function renderStatusMediaPreview() {
+    const previewWrap = document.getElementById("statusMediaPreview");
+    const previewInner = document.getElementById("statusMediaPreviewInner");
+    const mediaName = document.getElementById("statusMediaName");
+    if (!previewWrap || !previewInner || !mediaName) return;
+
+    if (!statusComposerState.media) {
+        previewWrap.classList.remove("show");
+        previewInner.innerHTML = "";
+        mediaName.textContent = "No media selected";
+        return;
+    }
+
+    const { src, name, type } = statusComposerState.media;
+    mediaName.textContent = name || "Selected media";
+    if (type.startsWith("image/")) {
+        previewInner.innerHTML = `<img src="${src}" alt="${escapeHTML(name || "status image")}" />`;
+    } else if (type.startsWith("video/")) {
+        previewInner.innerHTML = `<video controls playsinline src="${src}"></video>`;
+    }
+    previewWrap.classList.add("show");
+}
+
+function attachStatusMedia(file) {
+    if (!file) return;
+    const kind = file.type.startsWith("video/") ? "video" : file.type.startsWith("image/") ? "image" : "file";
+    if (kind === "file") return;
+
+    const objectUrl = URL.createObjectURL(file);
+    statusComposerState.media = {
+        src: objectUrl,
+        name: file.name,
+        type: file.type,
+        kind: kind === "image" ? "photo" : "video"
+    };
+    renderStatusMediaPreview();
+}
+
+function clearStatusMedia() {
+    if (statusComposerState.media?.src?.startsWith("blob:")) {
+        URL.revokeObjectURL(statusComposerState.media.src);
+    }
+    statusComposerState.media = null;
+    renderStatusMediaPreview();
+}
+
+function publishStatus() {
+    const input = document.getElementById("statusComposerInput");
+    const text = input?.value.trim();
+    if (!text && !statusComposerState.media) return;
+
+    if (editingStatusId) {
+        const index = statusPosts.findIndex(item => item.id === editingStatusId);
+        if (index >= 0) {
+            const existing = statusPosts[index];
+            const nextText = text || (statusComposerState.type === "photo" ? "Shared a photo." : statusComposerState.type === "video" ? "Shared a video." : "Shared an update.");
+            const updated = {
+                ...existing,
+                type: statusComposerState.type,
+                text: nextText,
+                time: "Edited just now"
+            };
+
+            if (statusComposerState.media) {
+                updated.media = {
+                    src: statusComposerState.media.src,
+                    name: statusComposerState.media.name,
+                    type: statusComposerState.media.type
+                };
+            } else if (updated.media) {
+                delete updated.media;
+            }
+
+            statusPosts[index] = updated;
+            renderStatusStrip();
+            input.value = "";
+            clearStatusMedia();
+            editingStatusId = null;
+            statusComposerState.type = "thread";
+            document.querySelectorAll(".status-type-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.statusType === "thread"));
+            openStatusModal(updated.id);
+            return;
+        }
+    }
+
+    const payload = {
+        id: "status-" + Date.now(),
+        author: "Marco",
+        username: "@marco",
+        emoji: "👤",
+        time: "Just now",
+        type: statusComposerState.type,
+        text: text || (statusComposerState.type === "photo" ? "Shared a photo." : statusComposerState.type === "video" ? "Shared a video." : "Shared an update."),
+        likes: 0,
+        replies: []
+    };
+
+    if (statusComposerState.media) {
+        payload.media = {
+            src: statusComposerState.media.src,
+            name: statusComposerState.media.name,
+            type: statusComposerState.media.type
+        };
+    }
+
+    statusPosts.unshift(payload);
+    renderStatusStrip();
+    input.value = "";
+    clearStatusMedia();
+    editingStatusId = null;
+    statusComposerState.type = "thread";
+    document.querySelectorAll(".status-type-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.statusType === "thread");
+    });
+    openStatusModal(statusPosts[0].id);
+}
+
+function setProfileAvatar(element, avatar, fallback) {
+    if (!element) return;
+    if (avatar) {
+        element.textContent = "";
+        element.style.backgroundImage = `url(${avatar})`;
+        element.style.backgroundColor = "#1d2430";
+        return;
+    }
+    element.textContent = fallback;
+    element.style.backgroundImage = "none";
+    element.style.backgroundColor = "var(--accent)";
+}
+
+function applyTheme(theme) {
+    const validThemes = ["midnight", "forest", "ocean", "rose"];
+    settingsState.theme = validThemes.includes(theme) ? theme : "midnight";
+    document.body.dataset.theme = settingsState.theme;
+    document.querySelectorAll(".theme-option").forEach(option => {
+        option.classList.toggle("active", option.dataset.theme === settingsState.theme);
+    });
+}
+
+function setupThemeOptions() {
+    document.querySelectorAll(".theme-option").forEach(option => {
+        option.addEventListener("click", () => applyTheme(option.dataset.theme));
+    });
+}
+
+Object.defineProperty(window, "openStatusModal", { value: openStatusModal, configurable: true });
+Object.defineProperty(window, "startEditStatus", { value: startEditStatus, configurable: true });
+Object.defineProperty(window, "deleteStatus", { value: deleteStatus, configurable: true });
+Object.defineProperty(window, "closeStatusModal", { value: closeStatusModal, configurable: true });
+Object.defineProperty(window, "setStatusType", { value: setStatusType, configurable: true });
+Object.defineProperty(window, "publishStatus", { value: publishStatus, configurable: true });
+
+function setupProfilePhotoControls() {
+    const uploadBtn = document.getElementById("uploadProfilePhotoBtn");
+    const removeBtn = document.getElementById("removeProfilePhotoBtn");
+    const fileInput = document.getElementById("profilePhotoInput");
+
+    uploadBtn?.addEventListener("click", () => fileInput?.click());
+    removeBtn?.addEventListener("click", () => {
+        settingsState.profile.avatar = "";
+        persistSettings();
+        renderProfile();
+    });
+
+    fileInput?.addEventListener("change", event => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            settingsState.profile.avatar = String(reader.result || "");
+            persistSettings();
+            renderProfile();
+        };
+        reader.readAsDataURL(file);
+        event.target.value = "";
+    });
+}
+
+function toggleAI(name, enabled) {
+    const group = state.groups[state.currentGroupId];
+    if (!group) return;
+
+    const nextMembers = new Set(group.members);
+    if (enabled) nextMembers.add(name);
+    else nextMembers.delete(name);
+
+    group.members = [...nextMembers];
+    if (!group.members.length) group.members = ["Gemini"];
+
+    updateMembers();
+    buildGroupList();
+    syncInviteCheckboxes();
+}
+
+function setupMemberToggle() {
+    memberToggleBtn?.addEventListener("click", () => {
+        if (!membersPanelEl) return;
+        const isCollapsed = membersPanelEl.classList.toggle("collapsed");
+        document.body.classList.toggle("members-collapsed", isCollapsed);
+    });
+}
+
+function openSettings() {
+    const profile = settingsState.profile;
+    document.getElementById("profileNameInput").value = profile.name || "";
+    document.getElementById("profileUsernameInput").value = (profile.username || "").replace(/^@/, "");
+    document.getElementById("profileBioInput").value = profile.bio || "";
+    applyTheme(settingsState.theme);
+    document.getElementById("settingsModal").classList.add("show");
+}
+
+function closeSettings() {
+    document.getElementById("settingsModal")?.classList.remove("show");
+    applyTheme(settingsState.theme);
+}
+
+function saveSettings() {
+    const name = document.getElementById("profileNameInput").value.trim();
+    const username = document.getElementById("profileUsernameInput").value.trim().replace(/^@/, "").replace(/[^a-zA-Z0-9._-]/g, "");
+    settingsState.profile = {
+        ...settingsState.profile,
+        name: name || "Marco",
+        username: username || "marco",
+        bio: document.getElementById("profileBioInput").value.trim()
+    };
+    persistSettings();
+    renderProfile();
+    closeSettings();
+}
+
+/* ========================= GROUPS ========================= */
+
+function buildGroupList() {
+    chatListEl.innerHTML = "";
+
+    Object.values(state.groups).forEach(group => {
+        const item = document.createElement("div");
+        item.className = "chat-item group-item" +
+            (group.id === state.currentGroupId ? " active" : "");
+        item.dataset.groupId = group.id;
+
+        const last = group.messages.at(-1)?.content || "No messages yet";
+
+        item.innerHTML = `
+            <div class="chat-avatar">${escapeHTML(group.emoji)}</div>
+            <div class="chat-info">
+                <div class="chat-name">${escapeHTML(group.name)}</div>
+                <div class="chat-last">${escapeHTML(last.slice(0, 42))}</div>
+            </div>
+            <div class="group-badge">${group.members.length}</div>
+        `;
+
+        item.addEventListener("click", () => switchGroup(group.id));
+        chatListEl.appendChild(item);
+    });
+
+    const newButton = document.createElement("button");
+    newButton.className = "new-group-btn";
+    newButton.textContent = "+ New Group";
+    newButton.addEventListener("click", createNewGroup);
+    chatListEl.appendChild(newButton);
+}
+
+function switchGroup(groupId) {
+    if (!state.groups[groupId]) return;
+    state.currentGroupId = groupId;
+    buildGroupList();
+    renderCurrentGroup();
+    updateMembers();
+    syncInviteCheckboxes();
+    closeMentionMenu();
+}
+
+function renderCurrentGroup() {
+    const group = state.groups[state.currentGroupId];
+    if (!group) return;
+
+    groupNameEl.textContent = group.name;
+    groupMembersEl.textContent = `${group.members.length + 1} members`;
+    groupAvatarEl.textContent = group.emoji;
+    messagesEl.innerHTML = "";
+
+    group.messages.forEach(m => {
+        const emoji = m.sender === "Marco"
+            ? "👤"
+            : m.sender === "System"
+                ? "⚙️"
+                : aiCatalog[m.sender]?.emoji || "🤖";
+        addMessageToDOM(m.sender, m.content, m.sender === "Marco", emoji, m);
+    });
+
+    scrollMessages();
+}
+
+function createNewGroup() {
+    const name = prompt("Nama grup baru:");
+    if (!name?.trim()) return;
+
+    const id = "group-" + Date.now();
+    state.groups[id] = {
+        id,
+        name: name.trim(),
+        emoji: "💬",
+        messages: [{ sender: "System", content: "Grup berhasil dibuat. Tekan @ untuk memilih AI." }],
+        members: ["Gemini"]
+    };
+
+    persistAppState();
+    switchGroup(id);
+}
+
+/* ========================= MESSAGES ========================= */
+
+function addMessageToDOM(sender, content, isUser, emoji, metadata = {}) {
+    const message = document.createElement("div");
+    const isError = String(content).startsWith("❌");
+    const isSystem = sender === "System";
+    message.className = "message" + (isUser ? " user" : "") +
+        (isError ? " error" : "") + (isSystem ? " system" : "");
+    const replyMarkup = metadata.replyTo
+        ? `<div class="reply-preview"><strong>${escapeHTML(metadata.replyTo.sender)}:</strong> ${escapeHTML(metadata.replyTo.content)}</div>`
+        : "";
+    const attachment = metadata.attachment || null;
+    const attachmentDownload = attachment?.dataUrl || attachment?.url || "";
+    const attachmentImage = attachment?.type?.startsWith("image/") && attachmentDownload
+        ? `<img class="attachment-image" src="${attachmentDownload}" alt="${escapeHTML(attachment.name || "Uploaded image")}">`
+        : "";
+    const attachmentMarkup = attachment
+        ? `<div class="attachment">${attachmentImage}<div class="attachment-meta"><span>📎</span><span class="attachment-name">${escapeHTML(attachment.name || "file")}</span><span class="attachment-size">${formatFileSize(attachment.size || 0)}</span>${attachmentDownload ? `<a class="attachment-download" href="${attachmentDownload}" download="${escapeHTML(attachment.name || "file")}" title="Download ${escapeHTML(attachment.name || "file")}">Download</a>` : ""}</div></div>`
+        : "";
+    message.innerHTML = `
+        <div class="avatar">${escapeHTML(emoji)}</div>
+        <div class="message-content">
+            <div class="sender">${escapeHTML(sender)}</div>
+            ${replyMarkup}
+            <div class="bubble markdown-content">${renderMarkdown(content)}${attachmentMarkup}</div>
+            <div class="message-tools">
+                <button class="message-action" type="button">Reply</button>
+            </div>
+        </div>
+    `;
+    message.querySelector(".message-action").addEventListener("click", () => startReply({ sender, content }));
+    messagesEl.appendChild(message);
+}
+
+function addMessage(sender, content, emoji = "🤖", isUser = false, metadata = {}) {
+    const group = state.groups[state.currentGroupId];
+    if (!group) return;
+
+    const message = { sender, content, ...metadata };
+    group.messages.push(message);
+
+    if (metadata.attachment) {
+        const existing = state.files.find(file => file.name === metadata.attachment.name && file.size === metadata.attachment.size && file.type === metadata.attachment.type);
+        if (!existing) {
+            state.files.push({
+                ...metadata.attachment,
+                id: `file-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
+                createdAt: new Date().toISOString(),
+                groupId: state.currentGroupId
+            });
+        }
+    }
+
+    addMessageToDOM(sender, content, isUser, emoji, message);
+    scrollMessages();
+    buildGroupList();
+    persistAppState();
+}
+
+function scrollMessages() {
+    requestAnimationFrame(() => {
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+    });
+}
+
+async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text && !pendingAttachment) return;
+
+    const replyTarget = replyTo && aiCatalog[replyTo.sender] ? replyTo.sender : "";
+    const alreadyMentionsReplyTarget = replyTarget
+        && new RegExp(`(^|\\s)@${replyTarget}(?=\\s|$)`, "i").test(text);
+    const replyMention = replyTarget && !alreadyMentionsReplyTarget ? `@${replyTarget} ` : "";
+    const messageText = `${replyMention}${text || `Mengirim file: ${pendingAttachment.name}`}`.trim();
+    const metadata = {
+        ...(replyTo ? { replyTo } : {}),
+        ...(pendingAttachment ? { attachment: pendingAttachment } : {})
+    };
+    addMessage("Marco", messageText, "👤", true, metadata);
+    inputEl.value = "";
+    inputEl.style.height = "44px";
+    closeMentionMenu();
+    clearReply();
+    clearPendingAttachment();
+
+    const targets = detectAITargets(messageText);
+    if (!targets.length) {
+        addMessage("System", "Tidak ada AI yang ditag. Tekan @ untuk memilih AI.", "⚙️");
+        return;
+    }
+
+    setTyping(true);
+
+    try {
+        // Sequential on purpose: the next AI receives the previous AI's answer.
+        for (const ai of targets) {
+            try {
+                const result = await callServerAI(ai, messageText);
+                addMessage(ai, result.text || "Teks kosong.", aiCatalog[ai].emoji, false, result.attachment ? { attachment: result.attachment } : {});
+            } catch (err) {
+                addMessage(ai, `❌ ${err.message}`, aiCatalog[ai].emoji);
+            }
+        }
+    } finally {
+        setTyping(false);
+    }
+}
+
+function startReply(message) {
+    replyTo = {
+        sender: message.sender,
+        content: String(message.content).slice(0, 240)
+    };
+    document.getElementById("replyComposerText").textContent = `Reply ke ${replyTo.sender}: ${replyTo.content}`;
+    document.getElementById("replyComposer").classList.add("show");
+    inputEl.focus();
+}
+
+function clearReply() {
+    replyTo = null;
+    document.getElementById("replyComposer")?.classList.remove("show");
+}
+
+function setupFileInput() {
+    document.getElementById("fileInput").addEventListener("change", event => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (file.size > 1 * 1024 * 1024) {
+            addMessage("System", "File terlalu besar. Gunakan file maksimal 1 MB.", "⚙️");
+            event.target.value = "";
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            pendingAttachment = {
+                name: file.name,
+                size: file.size,
+                type: file.type || "application/octet-stream",
+                dataUrl: String(reader.result || "")
+            };
+            renderAttachmentPreview();
+            inputEl.focus();
+        };
+        reader.readAsDataURL(file);
+        event.target.value = "";
+    });
+}
+
+function renderAttachmentPreview() {
+    const preview = document.getElementById("attachmentPreview");
+    if (!preview) return;
+
+    if (!pendingAttachment) {
+        preview.classList.remove("show");
+        preview.innerHTML = "";
+        return;
+    }
+
+    const image = pendingAttachment.type.startsWith("image/")
+        ? `<img src="${pendingAttachment.dataUrl}" alt="${escapeHTML(pendingAttachment.name)}">`
+        : `<span aria-hidden="true">📎</span>`;
+    preview.innerHTML = `
+        ${image}
+        <div class="attachment-preview-info">
+            <div class="attachment-preview-name">${escapeHTML(pendingAttachment.name)}</div>
+            <div class="attachment-preview-size">${formatFileSize(pendingAttachment.size)}</div>
+        </div>
+        <button class="attachment-preview-remove" type="button" title="Remove attachment" aria-label="Remove attachment">×</button>
+    `;
+    preview.classList.add("show");
+    preview.querySelector(".attachment-preview-remove").addEventListener("click", clearPendingAttachment);
+}
+
+function clearPendingAttachment() {
+    pendingAttachment = null;
+    renderAttachmentPreview();
+}
+
+function detectAITargets(text) {
+    const group = state.groups[state.currentGroupId];
+    const lower = text.toLowerCase();
+
+    if (lower.includes("@all") || lower.includes("@semua")) {
+        return [...group.members];
+    }
+
+    return group.members.filter(ai =>
+        lower.includes("@" + ai.toLowerCase())
+    );
+}
+
+/* ========================= SERVER API ========================= */
+
+async function callServerAI(ai, userMessage) {
+    const group = state.groups[state.currentGroupId];
+
+    // Send the entire recent group context to Node/Express.
+    const context = group.messages.slice(-30);
+
+    const response = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            ai,
+            message: userMessage,
+            context,
+            group: group.name
+        })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || !data.success) {
+        throw new Error(data.error || `Server error ${response.status}`);
+    }
+
+    return {
+        text: String(data.response || ""),
+        attachment: data.file ? {
+            ...data.file,
+            size: Number(data.file.size || 0)
+        } : null
+    };
+}
+
+/* ========================= MENTION MENU ========================= */
+
+function createMentionMenu() {
+    const inputArea = document.querySelector(".input-area");
+    inputArea.style.position = "relative";
+
+    mentionMenu = document.createElement("div");
+    mentionMenu.className = "mention-menu";
+    inputArea.appendChild(mentionMenu);
+    renderMentionMenu("");
+}
+
+function renderMentionMenu(filter) {
+    const group = state.groups[state.currentGroupId];
+    if (!group) return;
+
+    const q = filter.toLowerCase();
+    const members = group.members.filter(name => name.toLowerCase().includes(q));
+
+    mentionOptions = [
+        { name: "all", emoji: "👥", desc: "Mention semua AI dalam grup" },
+        ...members.map(name => ({
+            name,
+            emoji: aiCatalog[name].emoji,
+            desc: aiCatalog[name].provider
+        }))
+    ];
+
+    mentionSelectedIndex = 0;
+    mentionMenu.innerHTML = `<div class="mention-title">Mention AI</div>`;
+
+    mentionOptions.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.className = "mention-option" + (index === 0 ? " selected" : "");
+        button.innerHTML = `
+            <div class="mention-avatar">${escapeHTML(option.emoji)}</div>
+            <div>
+                <div class="mention-name">@${escapeHTML(option.name)}</div>
+                <div class="mention-desc">${escapeHTML(option.desc)}</div>
+            </div>
+        `;
+        button.addEventListener("mousedown", e => {
+            e.preventDefault();
+            selectMention(index);
+        });
+        mentionMenu.appendChild(button);
+    });
+}
+
+function selectMention(index) {
+    const option = mentionOptions[index];
+    if (!option) return;
+
+    const text = inputEl.value;
+    const match = text.match(/(^|\s)@([^\s@]*)$/);
+    if (!match) return;
+
+    const tokenStart = match.index + match[1].length;
+    inputEl.value = text.slice(0, tokenStart) + `@${option.name} `;
+
+    inputEl.focus();
+    inputEl.dispatchEvent(new Event("input"));
+    closeMentionMenu();
+}
+
+function updateMentionSelection() {
+    mentionMenu.querySelectorAll(".mention-option").forEach((button, i) => {
+        button.classList.toggle("selected", i === mentionSelectedIndex);
+    });
+}
+
+function openMentionMenu(filter) {
+    renderMentionMenu(filter);
+    mentionMenu.classList.add("show");
+}
+
+function closeMentionMenu() {
+    mentionMenu?.classList.remove("show");
+}
+
+function setupInput() {
+    inputEl.addEventListener("input", () => {
+        const value = inputEl.value;
+        inputEl.style.height = "auto";
+        inputEl.style.height = Math.min(inputEl.scrollHeight, 140) + "px";
+
+        const match = value.match(/(^|\s)@([^\s@]*)$/);
+        if (!match) {
+            closeMentionMenu();
+            return;
+        }
+
+        openMentionMenu(match[2]);
+    });
+
+    inputEl.addEventListener("keydown", event => {
+        const mentionActive = mentionMenu.classList.contains("show") ||
+            (event.key === "Enter" && !event.shiftKey && /(^|\s)@[^\s@]*$/.test(inputEl.value));
+
+        if (mentionActive) {
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+                mentionSelectedIndex = (mentionSelectedIndex + 1) % mentionOptions.length;
+                updateMentionSelection();
+                return;
+            }
+            if (event.key === "ArrowUp") {
+                event.preventDefault();
+                mentionSelectedIndex = (mentionSelectedIndex - 1 + mentionOptions.length) % mentionOptions.length;
+                updateMentionSelection();
+                return;
+            }
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                selectMention(mentionSelectedIndex);
+                return;
+            }
+            if (event.key === "Tab") {
+                event.preventDefault();
+                selectMention(mentionSelectedIndex);
+                return;
+            }
+            if (event.key === "Escape") {
+                closeMentionMenu();
+                return;
+            }
+        }
+
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+}
+
+/* ========================= MEMBERS / INVITE ========================= */
+
+function buildInviteModal() {
+    const modalBox = document.querySelector("#inviteModal .modal-box");
+    if (!modalBox) return;
+
+    modalBox.innerHTML = `<div class="modal-title">Invite AI to this group</div>`;
+
+    Object.keys(aiCatalog).forEach(name => {
+        const label = document.createElement("label");
+        label.className = "ai-option";
+        label.innerHTML = `
+            ${aiCatalog[name].emoji}
+            <span>${name}</span>
+            <input type="checkbox" data-ai="${name}">
+        `;
+        modalBox.appendChild(label);
+    });
+
+    const done = document.createElement("button");
+    done.className = "close-modal";
+    done.textContent = "Done";
+    done.addEventListener("click", () => {
+        const group = state.groups[state.currentGroupId];
+        const selected = [...modalBox.querySelectorAll("input[data-ai]")]
+            .filter(input => input.checked)
+            .map(input => input.dataset.ai);
+
+        group.members = selected;
+        if (!group.members.length) group.members = ["Gemini"];
+
+        updateMembers();
+        buildGroupList();
+        closeInvite();
+    });
+
+    modalBox.appendChild(done);
+    syncInviteCheckboxes();
+}
+
+function syncInviteCheckboxes() {
+    const group = state.groups[state.currentGroupId];
+    document.querySelectorAll("input[data-ai]").forEach(input => {
+        input.checked = group.members.includes(input.dataset.ai);
+    });
+}
+
+function openInvite() {
+    syncInviteCheckboxes();
+    document.getElementById("inviteModal")?.classList.add("show");
+}
+
+function closeInvite() {
+    document.getElementById("inviteModal")?.classList.remove("show");
+}
+
+function updateMembers() {
+    const group = state.groups[state.currentGroupId];
+    memberListEl.innerHTML = `
+        <div class="member">
+            <div class="member-avatar">👤</div>
+            <div class="member-info">
+                <div class="member-name">Marco</div>
+                <div class="member-role">You</div>
+            </div>
+            <div class="online"></div>
+        </div>
+    `;
+
+    group.members.forEach(name => {
+        const ai = aiCatalog[name];
+        const member = document.createElement("div");
+        member.className = "member";
+        member.innerHTML = `
+            <div class="member-avatar">${ai.emoji}</div>
+            <div class="member-info">
+                <div class="member-name">${name}</div>
+                <div class="member-role">${ai.provider}</div>
+            </div>
+            <div class="online"></div>
+        `;
+        memberListEl.appendChild(member);
+    });
+
+    memberCountEl.textContent = `${group.members.length + 1} members`;
+    groupMembersEl.textContent = `${group.members.length + 1} members`;
+}
+
+/* ========================= YOUTUBE APP ========================= */
+
+function createYoutubePage() {
+    const page = document.createElement("div");
+    page.id = "youtubePage";
+    page.className = "youtube-page";
+    page.innerHTML = `
+        <div class="youtube-topbar">
+            <div class="youtube-brand">Watchroom</div>
+            <div class="youtube-search">
+                <input id="youtubeSearchInput" placeholder="Search videos, creators, topics..." aria-label="Search YouTube">
+                <button id="youtubeSearchButton">Search</button>
+            </div>
+            <button class="youtube-close" id="youtubeClose">Back to chat</button>
+        </div>
+        <div class="youtube-layout">
+            <aside class="youtube-sidebar">
+                <div class="youtube-side-label">Your space</div>
+                <button class="youtube-side-item active"><span>⌂</span> Home</button>
+                <button class="youtube-side-item"><span>◷</span> Watch later</button>
+                <button class="youtube-side-item"><span>♡</span> Liked videos</button>
+                <div class="youtube-side-label">Signed in as</div>
+                <button class="youtube-side-item"><span>●</span> Marco</button>
+            </aside>
+            <main class="youtube-content">
+                <div id="youtubePlayerWrap" class="youtube-player-wrap">
+                    <iframe id="youtubePlayer" class="youtube-player"
+                        allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+                <div class="youtube-kicker">Curated for Marco</div>
+                <div class="youtube-section-title">A good place to start.</div>
+                <div class="youtube-chips">
+                    <button class="youtube-chip active" data-query="">For you</button>
+                    <button class="youtube-chip" data-query="design">Design</button>
+                    <button class="youtube-chip" data-query="technology">Technology</button>
+                    <button class="youtube-chip" data-query="music">Music</button>
+                    <button class="youtube-chip" data-query="documentary">Documentary</button>
+                </div>
+                <div id="youtubeSearchHistory" class="youtube-search-history"></div>
+                <div id="youtubeResults" class="youtube-results"></div>
+            </main>
+        </div>
+    `;
+
+    document.body.appendChild(page);
+    document.getElementById("youtubeClose").addEventListener("click", closeYoutubePage);
+    document.getElementById("youtubeSearchButton").addEventListener("click", searchYoutube);
+    document.getElementById("youtubeSearchInput").addEventListener("keydown", e => {
+        if (e.key === "Enter") searchYoutube();
+    });
+
+    page.querySelectorAll(".youtube-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+            page.querySelectorAll(".youtube-chip").forEach(item => item.classList.remove("active"));
+            chip.classList.add("active");
+            const query = chip.dataset.query;
+            if (query) searchYoutube(query);
+            else renderYoutubeRecommendations();
+        });
+    });
+
+    renderSearchHistory();
+    renderYoutubeRecommendations();
+}
+
+function renderSearchHistory() {
+    const container = document.getElementById("youtubeSearchHistory");
+    if (!container) return;
+
+    if (!state.searchHistory.length) {
+        container.innerHTML = "";
+        return;
+    }
+
+    container.innerHTML = state.searchHistory
+        .slice(0, 8)
+        .map(query => `<button class="youtube-search-history-item" type="button" data-query="${escapeHTML(query)}">${escapeHTML(query)}</button>`)
+        .join("");
+
+    container.querySelectorAll(".youtube-search-history-item").forEach(button => {
+        button.addEventListener("click", () => searchYoutube(button.dataset.query));
+    });
+}
+
+function saveSearchHistoryEntry(query) {
+    const value = String(query || "").trim();
+    if (!value) return;
+
+    state.searchHistory = [value, ...state.searchHistory.filter(item => item.toLowerCase() !== value.toLowerCase())].slice(0, 8);
+    renderSearchHistory();
+    persistAppState();
+}
+
+window.toggleYoutube = openYoutubePage;
+
+function openYoutubePage() {
+    document.getElementById("youtubePage")?.classList.add("show");
+    renderYoutubeRecommendations();
+}
+
+function loadYoutube() {
+    const url = document.getElementById("youtubeUrl")?.value.trim();
+    if (!url) return;
+
+    const match = url.match(/(?:v=|\/)([A-Za-z0-9_-]{11})(?:[?&]|$)/) || url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
+    const videoId = match ? match[1] : null;
+    if (!videoId) return;
+
+    const player = document.getElementById("youtubeFrame");
+    if (player) player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    document.getElementById("youtubePanel")?.classList.add("show");
+}
+
+function closeYoutubePage() {
+    document.getElementById("youtubePage")?.classList.remove("show");
+}
+
+let youtubeRequestId = 0;
+
+async function renderYoutubeRecommendations() {
+    const requestId = ++youtubeRequestId;
+    const container = document.getElementById("youtubeResults");
+    if (!container) return;
+
+    const cached = state.youtubeCache?.items || [];
+    if (cached.length) {
+        renderYoutubeCards(cached, "Offline cache ready");
+    } else {
+        container.innerHTML = `<div class="youtube-empty">Loading your home feed...</div>`;
+    }
+
+    try {
+        const response = await fetch("/api/youtube/home");
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.success) throw new Error(data.error || `Server error ${response.status}`);
+        if (requestId !== youtubeRequestId) return;
+
+        const items = data.items || [];
+        if (items.length) {
+            state.youtubeCache = { items: await hydrateThumbnailCache(items) };
+            saveYoutubeCache();
+            renderYoutubeCards(state.youtubeCache.items);
+        }
+    } catch (err) {
+        if (!cached.length) {
+            container.innerHTML = `<div class="youtube-empty">${escapeHTML(err.message)}</div>`;
+        }
+    }
+}
+
+async function searchYoutube(chipQuery = "") {
+    const query = chipQuery || document.getElementById("youtubeSearchInput").value.trim();
+    if (!query) return;
+    const requestId = ++youtubeRequestId;
+
+    saveSearchHistoryEntry(query);
+
+    const cachedMatches = (state.youtubeCache?.items || []).filter(item =>
+        `${item.title} ${item.channel}`.toLowerCase().includes(query.toLowerCase())
+    );
+
+    const container = document.getElementById("youtubeResults");
+    if (cachedMatches.length) {
+        renderYoutubeCards(cachedMatches, "Cached results");
+    } else {
+        container.innerHTML = `<div class="youtube-empty">Searching YouTube...</div>`;
+    }
+
+    try {
+        const response = await fetch(`/api/youtube/search?q=${encodeURIComponent(query)}`);
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.success) throw new Error(data.error || `Server error ${response.status}`);
+        if (requestId !== youtubeRequestId) return;
+
+        const items = data.items || [];
+        if (items.length) {
+            const hydrated = await hydrateThumbnailCache(items);
+            state.youtubeCache = { items: [...hydrated, ...(state.youtubeCache?.items || [])].slice(0, 40) };
+            saveYoutubeCache();
+            renderYoutubeCards(hydrated);
+        }
+    } catch (err) {
+        if (!cachedMatches.length) {
+            container.innerHTML = `<div class="youtube-empty">❌ ${escapeHTML(err.message)}</div>`;
+        }
+    }
+}
+
+function renderYoutubeCards(videos, note = "") {
+    const container = document.getElementById("youtubeResults");
+    container.innerHTML = "";
+
+    if (note) {
+        const notice = document.createElement("div");
+        notice.className = "youtube-empty";
+        notice.textContent = note;
+        container.appendChild(notice);
+    }
+
+    if (!videos.length) {
+        container.innerHTML = `<div class="youtube-empty">Tidak ada video ditemukan.</div>`;
+        return;
+    }
+
+    videos.forEach(video => {
+        const card = document.createElement("div");
+        card.className = "youtube-card";
+        const published = video.publishedAt ? formatYoutubeDate(video.publishedAt) : "Recently";
+        const views = video.views ? ` · ${formatViews(video.views)} views` : "";
+        const thumb = video.thumbnailDataUrl || video.thumbnail || "";
+        card.innerHTML = `
+            <div class="youtube-thumb-wrap">
+                <img class="youtube-thumb" src="${escapeHTML(thumb)}" alt="">
+                <span class="youtube-duration">${video.offlineReady ? "OFFLINE" : "WATCH"}</span>
+            </div>
+            <div class="youtube-card-body">
+                <div class="youtube-card-title">${escapeHTML(video.title)}</div>
+                <div class="youtube-card-meta"><strong>${escapeHTML(video.channel)}</strong><br>${escapeHTML(published + views)}</div>
+            </div>
+        `;
+        card.addEventListener("click", () => playYoutubeVideo(video.id));
+        container.appendChild(card);
+    });
+}
+
+function loadYoutubeCache() {
+    try {
+        const raw = localStorage.getItem("youtube-cache-v1");
+        return raw ? JSON.parse(raw) : { items: [] };
+    } catch {
+        return { items: [] };
+    }
+}
+
+function saveYoutubeCache() {
+    try {
+        localStorage.setItem("youtube-cache-v1", JSON.stringify(state.youtubeCache || { items: [] }));
+    } catch {
+        // Ignore storage failures.
+    }
+}
+
+async function hydrateThumbnailCache(items) {
+    const hydrated = [];
+    for (const item of items) {
+        const base = {
+            id: item.id,
+            title: item.title,
+            channel: item.channel,
+            thumbnail: item.thumbnail,
+            publishedAt: item.publishedAt,
+            views: item.views,
+            offlineReady: false
+        };
+
+        if (item.thumbnail) {
+            try {
+                const response = await fetch(item.thumbnail, { mode: "cors" });
+                const blob = await response.blob();
+                if (blob && blob.size) {
+                    const reader = new FileReader();
+                    const dataUrl = await new Promise((resolve, reject) => {
+                        reader.onloadend = () => resolve(reader.result || "");
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                    base.thumbnailDataUrl = dataUrl;
+                    base.offlineReady = true;
+                }
+            } catch {
+                // Keep remote thumbnail as fallback when network is unavailable.
+            }
+        }
+
+        hydrated.push(base);
+    }
+
+    return hydrated;
+}
+
+function formatYoutubeDate(value) {
+    const days = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 86400000));
+    if (days < 1) return "Today";
+    if (days < 30) return `${days} days ago`;
+    if (days < 365) return `${Math.floor(days / 30)} months ago`;
+    return `${Math.floor(days / 365)} years ago`;
+}
+
+function formatViews(value) {
+    const count = Number(value);
+    if (!Number.isFinite(count)) return String(value);
+    if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+    if (count >= 1000) return `${Math.round(count / 1000)}K`;
+    return String(count);
+}
+
+function playYoutubeVideo(videoId) {
+    const wrap = document.getElementById("youtubePlayerWrap");
+    const player = document.getElementById("youtubePlayer");
+    player.src = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1`;
+    wrap.classList.add("show");
+    document.querySelector(".youtube-content")?.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ========================= SEARCH GROUPS ========================= */
+
+function setupGroupSearch() {
+    const search = document.querySelector(".search input");
+    if (!search) return;
+
+    search.addEventListener("input", () => {
+        const q = search.value.toLowerCase().trim();
+        document.querySelectorAll(".group-item").forEach(item => {
+            item.style.display = item.textContent.toLowerCase().includes(q) ? "flex" : "none";
+        });
+    });
+}
+
+function setTyping(show) {
+    typingEl.style.display = show ? "flex" : "none";
+}
+
+function escapeHTML(text) {
+    const div = document.createElement("div");
+    div.textContent = String(text ?? "");
+    return div.innerHTML;
+}
+
+function renderMarkdown(text) {
+    const codeParts = [];
+    let html = escapeHTML(text);
+    html = html.replace(/`([^`\n]+)`/g, (_, code) => {
+        codeParts.push(`<code>${code}</code>`);
+        return `\u0000${codeParts.length - 1}\u0000`;
+    });
+    html = html
+        .replace(/^### (.+)$/gm, "<strong>$1</strong>")
+        .replace(/^## (.+)$/gm, "<strong>$1</strong>")
+        .replace(/^# (.+)$/gm, "<strong>$1</strong>")
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/__(.+?)__/g, "<strong>$1</strong>")
+        .replace(/~~(.+?)~~/g, "<del>$1</del>")
+        .replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>")
+        .replace(/(^|[^_])_([^_\n]+)_(?!_)/g, "$1<em>$2</em>")
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    html = html.replace(/\u0000(\d+)\u0000/g, (_, index) => codeParts[Number(index)]);
+    return html;
+}
+
+function formatFileSize(bytes) {
+    if (!bytes) return "0 B";
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+</script>
+
+</body>
+</html>
