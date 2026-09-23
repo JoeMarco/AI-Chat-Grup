@@ -1,3 +1,12 @@
+---
+title: AI Chat Grup
+emoji: 🤖
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+---
+
 # AI Syndicate
 
 A WhatsApp-inspired multi-AI chat prototype with a modern product-style interface. This project combines group chat, AI mentions, status updates, and YouTube watchroom functionality in a single local app.
@@ -64,6 +73,21 @@ Then open:
 ```text
 http://localhost:3000
 ```
+
+## Free deployment with Hugging Face Spaces
+
+This repository includes a `Dockerfile` and Hugging Face metadata for a free Docker Space without a payment card.
+
+1. Create a new Space at `https://huggingface.co/new-space`.
+2. Choose a unique Space name, select **Docker**, and choose the free hardware.
+3. In the Space, open **Settings > Secrets and variables**.
+4. Add `GEMINI_API_KEY`, `GROQ_API_KEY`, and `YOUTUBE_API_KEY` as secrets. Add `YOUTUBE_REGION=ID` as a variable.
+5. Connect or upload this GitHub repository, or push the repository contents to the Space.
+6. Wait for the Docker build, then open the Space URL.
+
+The Space listens on port `7860`. Hugging Face runs the Express server from the included `Dockerfile`.
+
+The free Space may sleep when idle, and `data/db.json` is local storage that may reset when the Space rebuilds. Use a hosted database such as Supabase or Neon for durable production data.
 
 ## Free deployment with Render
 
