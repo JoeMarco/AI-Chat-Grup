@@ -393,17 +393,9 @@ app.get("/api/youtube/search", async (req, res) => {
         }
 
         if (!key) {
-            const demoQuery = q.toLowerCase();
-            const allDemoItems = demoYoutubeItems();
-            const items = allDemoItems.filter(item => {
-                const haystack = `${item.title} ${item.channel} ${item.views || ""}`.toLowerCase();
-                return haystack.includes(demoQuery) || demoQuery.includes(item.title.toLowerCase()) || demoQuery.includes(item.channel.toLowerCase());
-            });
-
-            return res.json({
-                success: true,
-                demo: true,
-                items: items.length ? items : allDemoItems.slice(0, 6)
+            return res.status(503).json({
+                success: false,
+                error: "Pencarian YouTube membutuhkan YOUTUBE_API_KEY di file .env."
             });
         }
 

@@ -84,11 +84,14 @@ GEMINI_MODEL=gemini-2.0-flash
 GROQ_API_KEY=your_groq_key_here
 GROQ_MODEL=openai/gpt-oss-120b
 OLLAMA_MODEL=llama3.2
+YOUTUBE_API_KEY=your_youtube_data_api_key_here
+YOUTUBE_REGION=ID
 ```
 
 Notes:
 - `.env` is ignored by Git via `.gitignore`
 - Ollama can work without an API key as long as Ollama is running locally
+- Watchstream search uses the YouTube Data API v3 and requires `YOUTUBE_API_KEY`
 - If the env variables are not set, some AI routes may fall back to defaults or produce limited behavior
 
 ## Features overview

@@ -4181,9 +4181,7 @@ async function searchYoutube(chipQuery = "") {
             renderYoutubeCards(hydrated);
         }
     } catch (err) {
-        if (!cachedMatches.length) {
-            container.innerHTML = `<div class="youtube-empty">❌ ${escapeHTML(err.message)}</div>`;
-        }
+        container.innerHTML = `<div class="youtube-empty">❌ ${escapeHTML(err.message)}</div>`;
     }
 }
 
