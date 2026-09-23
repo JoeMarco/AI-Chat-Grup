@@ -65,6 +65,20 @@ Then open:
 http://localhost:3000
 ```
 
+## Free deployment with Render
+
+This repository includes `render.yaml` for a free Render web service.
+
+1. Push the repository to GitHub.
+2. In Render, choose **New > Blueprint** and connect `JoeMarco/AI-Chat-Grup`.
+3. Render detects `render.yaml` and creates the Node web service.
+4. Add the secret values when Render prompts for `GEMINI_API_KEY`, `GROQ_API_KEY`, and `YOUTUBE_API_KEY`.
+5. Deploy and open the generated `onrender.com` URL.
+
+GitHub stores the source code; Render runs the Express server. GitHub Pages alone cannot run this project because the app needs the Node.js backend.
+
+The free service may sleep when idle. `data/db.json` is local storage and may not survive a redeploy, so use a hosted database such as Supabase or Neon for durable production data.
+
 For development with live reload:
 
 ```bash
